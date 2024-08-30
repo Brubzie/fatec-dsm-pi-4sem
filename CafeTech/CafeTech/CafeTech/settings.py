@@ -124,7 +124,8 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Configurações de autenticação
-LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "index"
+LOGOUT_REDIRECT_URL = "login"
 
 # Adiciona '/' no final dos urls que não o tiverem
 APPEND_SLASH = True
