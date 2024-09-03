@@ -2,9 +2,35 @@
 
 <!-- Título -->
 {% block page_title %}
-    Registre-se
+    Registro
 {% endblock page_title %}
 
 {% block content %}
+    <div class="form-container">
+        <h2>Registro de Usuário</h2>
+        <!-- Register forms -->
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username.label_tag }} 
+                {{ form.username }}
+                <div class="text-danger">{{ form.username.errors }}</div>
+            </div>
+        
+            <div class="form-group">
+                {{ form.password.label_tag }} 
+                {{ form.password }}
+                <div class="text-danger">{{ form.password.errors }}</div>
+            </div>
+        
+            <div class="form-group">
+                {{ form.confirm_password.label_tag }} 
+                {{ form.confirm_password }}
+                <div class="text-danger">{{ form.confirm_password.errors }}</div>
+            </div>
 
+            <button class="btn btn-primary" type="submit">Registrar</button>
+        </form>
+        <!-- Register forms - End -->
+    </div>
 {% endblock content %}
