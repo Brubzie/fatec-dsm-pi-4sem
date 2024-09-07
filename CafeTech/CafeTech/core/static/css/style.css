@@ -1,3 +1,12 @@
+/* Animação do ícone dentro da navbar */
+.navbar-icon {
+    transition: transform 0.2s ease-in-out;
+}
+
+.navbar-icon:hover {
+    transform: scale(1.1);
+}
+
 /* Estilização das mensagens de erro */
 .errorlist {
     color: #ff4c4c;
