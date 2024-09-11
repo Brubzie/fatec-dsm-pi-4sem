@@ -11,7 +11,7 @@ A aplicação "CafeTech" é uma plataforma desenvolvida em Django com o objetivo
   <a href="https://github.com/Brubzie">
     <img src="https://avatars.githubusercontent.com/Brubzie" width="15%">
   </a>
-  <a href="https://github.com/pabloEduardobarbosa">
-    <img src="https://avatars.githubusercontent.com/pabloEduardobarbosa" width="15%">
+  <a href="https://github.com/pabloEduardoBarbosaa">
+    <img src="https://avatars.githubusercontent.com/pabloEduardoBarbosaa" width="15%">
   </a>
 </p>
