@@ -9,22 +9,39 @@
 {% block content %}
     <div class="form-container">
         <h2>Login</h2>
-        <form method="post">
+        <form method="post" class="form">
             {% csrf_token %}
-            {{ form.non_field_errors }}
+            
+            <!-- Exibir erros gerais do formulário -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
             <div class="form-group">
-                {{ form.username.label_tag }} 
+                <!-- Campo de username -->
+                {{ form.username.label_tag }}
                 {{ form.username }} 
-                {{ form.username.errors|striptags }}
+                {% if form.username.errors %}
+                    <div class="error">
+                        {{ form.username.errors|striptags }}
+                    </div>
+                {% endif %}
             </div>
 
             <div class="form-group">
+                <!-- Campo de password -->
                 {{ form.password.label_tag }} 
-                {{ form.password }} 
-                {{ form.password.errors|striptags }}
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="error">
+                        {{ form.password.errors|striptags }}
+                    </div>
+                {% endif %}
             </div>
 
-            <button type="submit">Login</button>
+            <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
 {% endblock content %}
