@@ -10,7 +10,7 @@
     <div class="form-container">
         <h2>Registro de Usuário</h2>
         <!-- Register forms -->
-        <form method="post">
+        <form method="post" action="{% url 'register' %}">
             {% csrf_token %}
             <div class="form-group">
                 {{ form.username.label_tag }} 

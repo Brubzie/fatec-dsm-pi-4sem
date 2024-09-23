@@ -5,7 +5,7 @@ from .views import (
     LoginView,
     HomeClientView,
     HistoryClientView,
-    logout,
+    LogoutView,
 )
 
 urlpatterns = [
@@ -14,5 +14,5 @@ urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
     path("home/", HomeClientView.as_view(), name="home_client"),
     path("history/", HistoryClientView.as_view(), name="history_client"),
-    path("logout/", logout, name="logout"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 ]

@@ -1,65 +1,93 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth import login
-from django.contrib.auth import logout as auth_logout
-from .forms import RegisterForm
+from django.contrib.auth import logout, authenticate, login
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from .forms import RegisterForm, LoginForm
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(View):
-    template_name = "index.html"
+    template_name = 'index.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        data = {'user': request.user}
+        return render(request, self.template_name, data)
 
 
 class RegisterView(View):
-    template_name = "register.html"
+    template_name = 'register.html'
 
     def get(self, request):
-        form = RegisterForm()
-        return render(request, self.template_name, {"form": form})
+        data = {'form': RegisterForm()}
+        return render(request, self.template_name, data)
 
     def post(self, request):
         form = RegisterForm(request.POST)
+        
         if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data["password"])
-            user.save()
-            login(request, user)
-            return redirect(
-                "index"
-            )  # Redireciona para a página inicial ou outra página de sua escolha
-        return render(request, self.template_name, {"form": form})
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            confirm_password = form.cleaned_data.get('confirm_password')
+
+            if username and password and confirm_password and password == confirm_password:
+                user = User.objects.create_user(
+                    username = username,
+                    password = password
+                )
+                
+                if user:
+                    return HttpResponseRedirect(reverse('login'))
+                
+        data = {
+            'form': form,
+            'error': 'Usuário ou senha inválidos'
+        }
+        return render(request, self.template_name, {'form': form})
 
 
 class LoginView(LoginView):
-    template_name = "login.html"
-    redirect_authenticated_user = True
+    template_name = 'login.html'
 
-    def get(self, request, *args, **kwargs):
-        # Se o usuário já está autenticado, redireciona para a página de destino
-        if self.request.user.is_authenticated:
-            return self.handle_no_permission()
-        # Caso contrário, renderiza o template com o formulário de login
-        return render(request, self.template_name, {"form": self.get_form()})
+    def get(self, request):
+        data = {'form': LoginForm()}
+        return render(request, self.template_name, data)
 
+    def post(self, request):
+        form = LoginForm(data = request.POST)
+        
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+        
+        data = { 
+            'form': form,
+            'error': 'Usuário ou senha inválidos'
+        }     
+        return render(request, self.template_name, data)
 
 class HomeClientView(View):
-    template_name = "homeClient.html"
+    template_name = 'homeClient.html'
 
     def get(self, request):
         return render(request, self.template_name)
 
 
 class HistoryClientView(View):
-    template_name = "historyClient.html"
+    template_name = 'historyClient.html'
 
     def get(self, request):
         return render(request, self.template_name)
 
 
-def logout(request):
-    auth_logout(request)
-    return redirect("index")
+class LogoutView(LoginRequiredMixin, View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse('login'))

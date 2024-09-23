@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 <!-- Título -->
 {% block page_title %}
@@ -9,7 +10,7 @@
 {% block content %}
     <div class="form-container">
         <h2>Login</h2>
-        <form method="post" class="form">
+        <form method="post" class="form" action="{% url 'login' %}">
             {% csrf_token %}
             
             <!-- Exibir erros gerais do formulário -->
@@ -24,7 +25,7 @@
                 {{ form.username.label_tag }}
                 {{ form.username }} 
                 {% if form.username.errors %}
-                    <div class="error">
+                    <div class="alert alert-danger" role="alert">
                         {{ form.username.errors|striptags }}
                     </div>
                 {% endif %}
@@ -35,7 +36,7 @@
                 {{ form.password.label_tag }} 
                 {{ form.password }}
                 {% if form.password.errors %}
-                    <div class="error">
+                    <div class="alert alert-danger" role="alert">
                         {{ form.password.errors|striptags }}
                     </div>
                 {% endif %}
