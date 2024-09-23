@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from django.core.exceptions import ValidationError
 
 class RegisterForm(forms.ModelForm):
@@ -58,3 +59,13 @@ class LoginForm(forms.Form):
         'placeholder': 'Senha'
     }))
 
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user is None:
+                raise forms.ValidationError("Nome de usuário ou senha incorretos.")
+        return cleaned_data

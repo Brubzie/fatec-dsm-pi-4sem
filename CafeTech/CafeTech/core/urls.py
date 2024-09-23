@@ -1,4 +1,5 @@
 from django.urls import path
+from django.conf.urls import handler404
 from .views import (
     IndexView,
     RegisterView,
@@ -6,7 +7,13 @@ from .views import (
     HomeClientView,
     HistoryClientView,
     LogoutView,
+    handler404,
+    handler500,
 )
+
+# Definindo os handlers de erro
+handler404 = 'core.views.handler404'
+handler500 = 'core.views.handler500'
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
