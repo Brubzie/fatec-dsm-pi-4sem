@@ -7,11 +7,26 @@
 
 <!-- Conteúdo da página -->
 {% block content %}
-    <div class="container">
-        {% if user.is_authenticated %}
-            <h2>Olá, <b>{{ request.user.username }}!</b></h2>
-        {% else %}
-            <h2>Bem-vindo! Por favor, faça <a href="{% url 'login' %}">login</a> para continuar.</h2>
-        {% endif %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <div class="card shadow-lg p-4 cafetech">
+                {% if user.is_authenticated %}
+                    <h2 class="mb-4">Olá, <b class="username">{{ request.user.username }}</b>!</h2>
+                    <p class="lead">Seja bem-vindo(a) de volta!</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'logout' %}" class="btn btn-danger m-2">Sair</a>
+                    </div>
+                {% else %}
+                    <h2 class="mb-4">Bem-vindo ao CafeTech!</h2>
+                    <p class="lead">Por favor, faça seu registro ou login para continuar.</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'register' %}" class="btn btn-success m-2">Registrar</a>
+                        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+</div>
 {% endblock content %}
