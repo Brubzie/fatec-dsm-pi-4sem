@@ -7,6 +7,9 @@ from django.urls import reverse
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib import messages
 
 
 class IndexView(View):
@@ -73,11 +76,19 @@ class LoginView(LoginView):
         }     
         return render(request, self.template_name, data)
 
+@method_decorator(login_required(login_url='/login/'), name='dispatch') # Redireciona quando o usuário não está logado
 class HomeClientView(View):
     template_name = 'homeClient.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        # Adiciona uma mensagem de aviso se o usuário não estiver autenticado
+        if not request.user.is_authenticated:
+            messages.warning(request, 'Você precisa estar logado para acessar esta página.')
+        return super().dispatch(request, *args, **kwargs)
+
     def get(self, request):
-        return render(request, self.template_name)
+        data = {'user': request.user}
+        return render(request, self.template_name, data)
 
 
 class HistoryClientView(View):

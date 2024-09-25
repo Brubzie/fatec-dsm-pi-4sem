@@ -17,6 +17,48 @@
 
         <!-- CSS Personalizado -->
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+        <!-- Google One Tap Script -->
+        <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+        <script>
+            // Função para tratar a resposta do Google One Tap
+            function handleCredentialResponse(response) {
+                // Enviar o token de volta ao servidor Django
+                fetch('/google-login/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',  // CSRF token necessário para o Django
+                    },
+                    body: JSON.stringify({ credential: response.credential })
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href = '/';  // Redireciona ao login bem-sucedido
+                    } else {
+                        console.error('Login falhou');
+                    }
+                });
+            }
+
+            // Inicialização do Google One Tap
+            window.onload = function () {
+                // Somente mostrar o Google One Tap se o usuário não tiver sessão ativa
+                var hasSession = {{ user.is_authenticated|yesno:"true,false" }};
+                if (!hasSession) {
+                    google.accounts.id.initialize({
+                        client_id: 'YOUR_GOOGLE_CLIENT_ID',  // Substitua pelo seu Google Client ID
+                        callback: handleCredentialResponse,
+                        auto_select: true,  // Tentar login automático
+                        cancel_on_tap_outside: false
+                    });
+
+                    // Mostrar o prompt do Google One Tap
+                    google.accounts.id.prompt();
+                }
+            };
+        </script>
+
     </head>
     <body>
 
@@ -38,7 +80,7 @@
 
                                 {% if user.is_authenticated %}
                                     <!-- Se o usuário estiver logado, exibe a mensagem de boas-vindas -->
-                                    <span class="navbar-text">Bem-vindo, <b>{{ user.username }}!</b></span>
+                                    <a href="{% url 'homeClient' %}" class="username nav-link">{{ user.username }}</a>
                                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                                 {% else %}
                                     <a class="nav-link" href="{% url 'register' %}">Sign-up</a>
@@ -52,6 +94,18 @@
                 </nav>
             </div>
         </nav>
+
+        <!-- Exibir mensagens de alerta -->
+        {% if messages %}
+        <div class="container mt-3">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
 
         <!-- Conteúdo da página -->
         <main class="container">
