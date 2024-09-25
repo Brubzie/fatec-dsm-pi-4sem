@@ -12,7 +12,7 @@
         <div class="col-md-8 text-center">
             <div class="card shadow-lg p-4 cafetech">
                 {% if user.is_authenticated %}
-                    <h2 class="mb-4">Olá, <b class="username">{{ request.user.username }}</b>!</h2>
+                    <h2 class="mb-4">Olá, <b>{{ request.user.username }}</b>!</h2>
                     <p class="lead">Seja bem-vindo(a) de volta!</p>
                     <div class="d-flex justify-content-center">
                         <a href="{% url 'logout' %}" class="btn btn-danger m-2">Sair</a>

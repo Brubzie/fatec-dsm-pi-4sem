@@ -76,18 +76,17 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                             <div class="navbar-nav">
-                                <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
 
                                 {% if user.is_authenticated %}
                                     <!-- Se o usuário estiver logado, exibe a mensagem de boas-vindas -->
-                                    <a href="{% url 'homeClient' %}" class="username nav-link">{{ user.username }}</a>
-                                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                                    <a href="{% url 'home' %}" class="nav-link link-success">{{ user.username }}</a>
+                                    <a class="nav-link link-danger" href="{% url 'logout' %}">Logout</a>
                                 {% else %}
                                     <a class="nav-link" href="{% url 'register' %}">Sign-up</a>
                                     <a class="nav-link" href="{% url 'login' %}">Login</a>
                                 {% endif %}
 
-                                <a class="nav-link" href="https://github.com/Brubzie/fatec-dsm-pi-4sem/" target="_blank">Projeto no GitHub</a>
+                                <a class="nav-link active" href="https://github.com/Brubzie/fatec-dsm-pi-4sem/" target="_blank">Repositório</a>
                             </div>
                         </div>
                     </div>
