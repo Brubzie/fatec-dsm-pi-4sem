@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
+from CafeTech.settings import YOUR_GOOGLE_CLIENT_ID
 
 
 class IndexView(View):
@@ -22,6 +23,12 @@ class IndexView(View):
 
 class RegisterView(View):
     template_name = 'register.html'
+
+    def def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context['YOUR_GOOGLE_CLIENT_ID'] = YOUR_GOOGLE_CLIENT_ID
+        
+        return context
 
     def get(self, request):
         data = {'form': RegisterForm()}
