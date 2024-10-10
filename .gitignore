@@ -1,27 +1,184 @@
-# Ignorar arquivos de byte compilados e arquivos de cache
+# Criado por https://www.toptal.com/developers/gitignore/api/venv,django
+# Editar em https://www.toptal.com/developers/gitignore?templates=venv,django
 
-# Ignora o diretório __pycache__ e seu conteúdo
-CafeTech/core/__pycache__/
-CafeTech/CafeTech/__pycache__
+### Django ###
 
-# Ignora arquivos compilados Python
+# Arquivos de log gerados durante a execução da aplicação.
+*.log
+
+# Arquivos .pot são templates de tradução gerados pelo Django.
+*.pot
+
+# Arquivos Python compilados (bytecode).
 *.pyc
-*.pyo
-*.pyd
 
-# Padrões adicionais para arquivos compilados Python
+# Pasta de cache de módulos Python.
+__pycache__/
+
+# Arquivo local_settings.py, que pode conter configurações específicas do ambiente local.
+local_settings.py
+
+# Arquivo de banco de dados SQLite usado no desenvolvimento local.
+db.sqlite3
+db.sqlite3-journal
+
+# Pasta onde arquivos de mídia enviados pelo usuário são armazenados.
+media/
+
+# Se o seu processo de build inclui a execução de 'collectstatic', você provavelmente não precisa
+# incluir a pasta 'staticfiles/' no repositório Git.
+# Atualize e descomente a linha abaixo, conforme necessário.
+# <nome-do-projeto-django>/staticfiles/
+
+### Django.Python Stack ###
+
+# Arquivos Python compilados ou otimizados (.pyc, .pyo, etc.).
 *.py[cod]
+
+# Arquivos gerados pelo Python para representar classes de execução (ex: foo$py.class).
 *$py.class
 
-# Ignorar arquivos .pot e .so
-*.pot
+# Extensões em C.
 *.so
 
-# Ignorar o diretório venv
-CafeTech/venv/
+# Arquivos relacionados à distribuição e empacotamento do Python.
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Ignorar o diretório .vscode
-.vscode/
+# Arquivos gerados pelo PyInstaller, geralmente usados para empacotar o projeto em executáveis.
+*.manifest
+*.spec
 
-# Ignorar o sqlite
-*.sqlite3
+# Logs gerados durante a instalação de pacotes via pip.
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Relatórios de teste unitário e cobertura de código.
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Arquivos de tradução gerados pelo Django.
+*.mo
+
+# Arquivos do Flask (caso o projeto inclua).
+instance/
+.webassets-cache
+
+# Arquivos do Scrapy (caso seja utilizado para web scraping).
+.scrapy
+
+# Documentação gerada pelo Sphinx.
+docs/_build/
+
+# Arquivos gerados pelo PyBuilder, uma ferramenta de build Python.
+.pybuilder/
+target/
+
+# Arquivos de checkpoints gerados pelo Jupyter Notebook.
+.ipynb_checkpoints
+
+# Configurações do IPython.
+profile_default/
+ipython_config.py
+
+# Arquivos do pyenv (gerenciador de versões Python).
+.python-version
+
+# Arquivos do pipenv, caso utilizado para gerenciar dependências.
+Pipfile.lock
+
+# Arquivos do poetry, caso utilizado para gerenciar dependências e pacotes.
+poetry.lock
+
+# Arquivos do pdm, outra ferramenta de gerenciamento de dependências.
+.pdm.toml
+pdm.lock
+
+# Pacotes gerados pela PEP 582, utilizados por ferramentas como pyflow e pdm.
+__pypackages__/
+
+# Arquivos do Celery, se utilizado no projeto.
+celerybeat-schedule
+celerybeat.pid
+
+# Arquivos SageMath, uma ferramenta para cálculos matemáticos.
+*.sage.py
+
+### Ambientes virtuais ###
+# Ignora pastas de ambientes virtuais, que podem ter diferentes nomes.
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Arquivos de configuração gerados pelo Spyder (IDE para ciência de dados em Python).
+.spyderproject
+.spyproject
+
+# Configurações geradas pelo Rope, uma ferramenta de refatoração de código Python.
+.ropeproject
+
+# Documentação gerada pelo MkDocs.
+.site
+
+# Cache gerado pelo mypy, um verificador estático de tipos para Python.
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Cache do Pyre, outra ferramenta de verificação de tipos.
+.pyre/
+
+# Cache do pytype, uma ferramenta de análise estática de tipos.
+.pytype/
+
+# Símbolos de debug gerados pelo Cython, que compila código Python em C.
+cython_debug/
+
+# Arquivos de configuração do PyCharm (IDE para desenvolvimento Python).
+.idea/
+
+### venv ###
+
+# Ignora pastas e arquivos relacionados ao ambiente virtual (virtualenv).
+[Bb]in
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+pyvenv.cfg
+pip-selfcheck.json
+
+### Fim ###
+# Fim do arquivo gerado em https://www.toptal.com/developers/gitignore/api/venv,django
