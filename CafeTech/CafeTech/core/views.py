@@ -24,8 +24,8 @@ class IndexView(View):
 class RegisterView(View):
     template_name = 'register.html'
 
-    def def get_context_data(self, **kwargs) -> dict[str, Any]:
-        context = super(IndexView, self).get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['YOUR_GOOGLE_CLIENT_ID'] = YOUR_GOOGLE_CLIENT_ID
         
         return context
@@ -94,8 +94,9 @@ class HomeClientView(View):
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
-        data = {'user': request.user}
-        return render(request, self.template_name, data)
+        messages.info(request, 'Bem-vindo de volta!')
+        
+        return render(request, self.template_name, {'user': request.user})
 
 
 class HistoryClientView(View):
@@ -113,10 +114,13 @@ class LogoutView(LoginRequiredMixin, View):
 def handler404(request, *args, **argv):
     response = render(request, '404.html', {})
     response.status_code = 404
+    
     return response
 
 
 def handler500(request, *args, **argv):
     response = render(request, '500.html', {})
     response.status_code = 500
+    
     return response
+
