@@ -33,7 +33,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'phone_number']
+        fields = ['username', 'password', 'phone_number', 'confirm_password']
         labels = {
             'username': 'Usuário',
             'password': 'Senha',
@@ -55,6 +55,9 @@ class RegisterForm(forms.ModelForm):
         # Verificar se o username contém apenas números
         if username.isdigit():
             raise ValidationError('O nome de usuário não pode conter apenas números.')
+        
+        if re.search(r'[\W_]', username):  # Validação para caracteres especiais
+            raise ValidationError('O nome de usuário não deve conter caracteres especiais.')
         
         return username
 
@@ -91,7 +94,7 @@ class RegisterForm(forms.ModelForm):
         phone_number = self.cleaned_data.get('phone_number')
 
         # Validação de formato usando regex
-        phone_regex = re.compile(r'^\(\d{2}\) \d{4,5}-\d{4}$')
+        phone_regex = re.compile(r'^\(\d{2}\)\s?\d{4,5}-\d{4}$')
         if not phone_regex.match(phone_number):
             raise ValidationError('O número de telefone deve estar no formato (99) 99999-9999 ou (99) 9999-9999.')
         
