@@ -10,6 +10,7 @@
 {% block content %}
     <div class="form-container">
         <h2>Login</h2>
+        <!-- Login forms -->
         <form method="post" class="form" action="{% url 'login' %}">
             {% csrf_token %}
             
@@ -44,5 +45,32 @@
 
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
+        <!-- Login forms - End -->
+
+        <!-- Google One Tap Button -->
+        <div id="buttonDiv"></div>
+        <!-- Google One Tap Button - End -->
     </div>
+
+    <!-- Google One Tap Script -->
+    <script>
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+        }
+
+        window.onload = function () {
+            google.accounts.id.initialize({
+                client_id: "{{ YOUR_GOOGLE_CLIENT_ID }}",
+                callback: handleCredentialResponse
+            });
+
+            google.accounts.id.renderButton(
+                document.getElementById("buttonDiv"),
+                { theme: "outline", size: "large" }  // Customização do botão
+            );
+            
+            google.accounts.id.prompt(); // Exibe o One Tap automaticamente
+        }
+    </script>
+    <!-- Google One Tap Script - End -->
 {% endblock content %}

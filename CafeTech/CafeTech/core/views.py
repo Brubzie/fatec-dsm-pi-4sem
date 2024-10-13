@@ -57,7 +57,6 @@ class RegisterView(View):
         }
         return render(request, self.template_name, {'form': form})
 
-
 class LoginView(LoginView):
     template_name = 'login.html'
 

@@ -5,6 +5,15 @@ from django.core.exceptions import ValidationError
 import re
 
 class RegisterForm(forms.ModelForm):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite seu email',
+        }),
+        label='Email'
+    )
+    
     phone_number = forms.CharField(
         max_length=15,
         widget=forms.TextInput(attrs={
@@ -33,11 +42,12 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password', 'phone_number', 'confirm_password']
+        fields = ['username', 'email', 'phone_number', 'password', 'confirm_password']
         labels = {
             'username': 'Usuário',
             'password': 'Senha',
         }
+        
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -47,60 +57,64 @@ class RegisterForm(forms.ModelForm):
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        
-        # Verificar se o username tem no mínimo 4 caracteres
         if len(username) < 4:
             raise ValidationError('O nome de usuário deve ter pelo menos 4 caracteres.')
-        
-        # Verificar se o username contém apenas números
         if username.isdigit():
             raise ValidationError('O nome de usuário não pode conter apenas números.')
-        
-        if re.search(r'[\W_]', username):  # Validação para caracteres especiais
+        if re.search(r'[\W_]', username):
             raise ValidationError('O nome de usuário não deve conter caracteres especiais.')
-        
         return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('Este email já está em uso.')
+        return email
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-
-        # Validação da força da senha
         if len(password) < 8:
             raise ValidationError('A senha deve ter no mínimo 8 caracteres.')
-        
         if not re.search(r'[A-Z]', password):
             raise ValidationError('A senha deve conter pelo menos uma letra maiúscula.')
-        
         if not re.search(r'[a-z]', password):
             raise ValidationError('A senha deve conter pelo menos uma letra minúscula.')
-        
         if not re.search(r'[0-9]', password):
             raise ValidationError('A senha deve conter pelo menos um número.')
-        
         if not re.search(r'[\W_]', password):
             raise ValidationError('A senha deve conter pelo menos um caractere especial.')
-        
         return password
 
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
-        
         if password and confirm_password and password != confirm_password:
             raise ValidationError('As senhas não coincidem', code='password_mismatch')
         return confirm_password
-    
+
     def clean_phone_number(self):
         phone_number = self.cleaned_data.get('phone_number')
-
-        # Validação de formato usando regex
         phone_regex = re.compile(r'^\(\d{2}\)\s?\d{4,5}-\d{4}$')
         if not phone_regex.match(phone_number):
             raise ValidationError('O número de telefone deve estar no formato (99) 99999-9999 ou (99) 9999-9999.')
-        
         return phone_number
 
 class LoginForm(forms.Form):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
+        labels = {
+            'username': 'Usuário',
+            'password': 'Senha',
+        }
+        
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Digite seu usuário',
+            }),
+        }
+    
     username = forms.CharField(
         max_length=150, 
         required=True, 
