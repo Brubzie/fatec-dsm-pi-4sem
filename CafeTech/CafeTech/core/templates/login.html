@@ -55,22 +55,47 @@
     <!-- Google One Tap Script -->
     <script>
         function handleCredentialResponse(response) {
-            console.log("Encoded JWT ID token: " + response.credential);
+            sendDjango(response);
         }
-
+    
+        function sendDjango(response) {
+            var id_token = response.credential;
+    
+            fetch('/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_token: id_token
+                }),
+            })
+            .then((res) => {
+                if (res.ok) {
+                    return res.json();
+                } else {
+                    throw new Error('Erro na autenticação');
+                }
+            })
+            .then((data) => {
+                window.location.href = '/homeClient/';
+            })
+            .catch((err) => console.error('Erro:', err));
+        }
+    
         window.onload = function () {
             google.accounts.id.initialize({
                 client_id: "{{ YOUR_GOOGLE_CLIENT_ID }}",
                 callback: handleCredentialResponse
             });
-
+    
             google.accounts.id.renderButton(
                 document.getElementById("buttonDiv"),
                 { theme: "outline", size: "large" }  // Customização do botão
             );
-            
+    
             google.accounts.id.prompt(); // Exibe o One Tap automaticamente
         }
-    </script>
+    </script>    
     <!-- Google One Tap Script - End -->
 {% endblock content %}

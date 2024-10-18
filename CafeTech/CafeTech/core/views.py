@@ -11,6 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from CafeTech.settings import YOUR_GOOGLE_CLIENT_ID
+from google.oauth2 import id_token
+from google.auth.transport import requests
+import json, time
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import redirect
 
 
 class IndexView(View):
@@ -123,3 +128,21 @@ def handler500(request, *args, **argv):
     
     return response
 
+@csrf_exempt
+def google_login(request):
+    template_name = 'homeClient.html'
+    
+    time.sleep(3)
+    token = request.body
+    token = token.decode('utf-8').encode('windows-1252').decode('utf-8')
+    token = json.loads(token)
+    token = token['id_token']
+    
+    try:
+        idinfo = id_token.verify_oauth2_token(token, requests.Request(), YOUR_GOOGLE_CLIENT_ID)
+        userid = idinfo['sub']
+        print(idinfo)
+    except ValueError:
+        pass
+        
+    return render(request, template_name)
