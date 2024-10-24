@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 <!-- Título -->
 {% block page_title %}
@@ -7,7 +8,7 @@
 
 <!-- Conteúdo da página -->
 {% block content %}
-<div class="container mt-5">
+<!--<div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8 text-center">
             <div class="card shadow-lg p-4 cafetech">
@@ -28,5 +29,37 @@
             </div>
         </div>
     </div>
+</div>-->
+<div>
+    <div>
+        <h1>Faça parte do clube do café</h1>
+        <p>Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
+        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
+    </div>
+    <img src="{% static 'images/Index_CoffeeClub.jpg' %}" width="100%" height="auto" max-width="500px">
+</div>
+<div>
+    <h2>Vantagens do Clube</h2>
+    <div class="card advantage-container" style="width: 18rem;">
+        <img src="{% static 'images/Card1_Coffee.jpg' %}" class="card-img-top" alt="vantagem 1" height="250px">
+        <div class="card-body">
+          <h5 class="card-title advantage-title">Café</h5>
+          <p class="card-text advantage-desc">Garanta o seu café de cada dia para sobreviver ao dia.</p>
+        </div>
+      </div>
+      <div class="card advantage-container" style="width: 18rem;">
+        <img src="{% static 'images/Card2_Networking.jpg' %}" class="card-img-top" alt="vantagem 2" height="250px">
+        <div class="card-body">
+          <h5 class="card-title advantage-title">Networking</h5>
+          <p class="card-text advantage-desc">Estabeleça conexões que podem te ajudar futuramente.</p>
+        </div>
+      </div>
+      <div class="card advantage-container" style="width: 18rem;">
+        <img src="{% static 'images/Card3_Support.jpg' %}" class="card-img-top" alt="vantagem 3" height="250px">
+        <div class="card-body">
+          <h5 class="card-title advantage-title">Trocas</h5>
+          <p class="card-text advantage-desc">Exponha seus problemas e dúvidas, obtenha ajuda, e também ajude se puder.</p>
+        </div>
+      </div>
 </div>
 {% endblock content %}
