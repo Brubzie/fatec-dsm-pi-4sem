@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.conf import settings
 from google.oauth2 import id_token
 from google.auth.transport import requests
+from datetime import datetime
 import json
 
 
@@ -20,7 +21,10 @@ class IndexView(View):
     template_name = "index.html"
 
     def get(self, request):
-        data = {"user": request.user}
+        data = {
+            "user": request.user,
+            "current_year": datetime.now().year,
+        }
         return render(request, self.template_name, data)
 
 

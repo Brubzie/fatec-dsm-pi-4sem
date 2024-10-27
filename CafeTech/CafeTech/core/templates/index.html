@@ -12,6 +12,7 @@
     <div class="text-center mb-5">
         <h1>Faça parte do clube do café</h1>
         <p class="lead">Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
+        <a href="{% url 'register' %}" class="btn btn-primary m-2">Sign-up</a>
         <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
     </div>
     <div class="text-center">
@@ -51,4 +52,21 @@
         </div>
     </div>
 </div>
+
+<!-- Footer -->
+<footer class="bg-dark text-light text-center py-4">
+    <div class="container">
+        <p class="mb-0">&copy; {{ current_year }} CafeTech. Todos os direitos reservados.</p>
+        <div class="social-links mt-2">
+            <a href="https://www.facebook.com/?locale=pt_BR" class="text-light mx-2" target="_blank">Facebook</a>
+            <a href="https://twitter.com/?lang=pt-br" class="text-light mx-2" target="_blank">Twitter</a>
+            <a href="https://www.instagram.com/" class="text-light mx-2" target="_blank">Instagram</a>
+        </div>
+        <nav class="mt-2">
+            <a href="#" class="text-light mx-2">Sobre nós</a>
+            <a href="#" class="text-light mx-2">Contato</a>
+        </nav>
+    </div>
+</footer>
+<!-- Footer - End -->
 {% endblock content %}
