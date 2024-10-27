@@ -131,4 +131,5 @@ LOGIN_URL = "/login/"
 # Adiciona '/' no final dos urls que não o tiverem
 APPEND_SLASH = True
 
-YOUR_GOOGLE_CLIENT_ID = ""
+YOUR_GOOGLE_CLIENT_ID = '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'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
