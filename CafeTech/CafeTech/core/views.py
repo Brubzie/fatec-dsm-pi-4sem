@@ -1,7 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth import logout, login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .forms import RegisterForm, LoginForm
@@ -14,7 +14,6 @@ from CafeTech.settings import YOUR_GOOGLE_CLIENT_ID
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import json
-from django.views.decorators.csrf import csrf_exempt
 
 class IndexView(View):
     template_name = 'index.html'
