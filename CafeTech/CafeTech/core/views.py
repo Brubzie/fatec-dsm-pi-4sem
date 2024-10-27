@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
@@ -42,20 +42,15 @@ class RegisterView(View):
             elif User.objects.filter(email=email).exists():
                 messages.error(request, 'Email já está em uso.')
             else:
-                user = User.objects.create_user(
+                User.objects.create_user(
                     username=username,
                     password=password,
                     email=email
                 )
                 messages.success(request, 'Registro bem-sucedido! Faça login.')
-                return HttpResponseRedirect(reverse('login'))
-
-        data = {
-            'form': form,
-            'error': 'Erro no registro. Verifique as informações e tente novamente.'
-        }
+                return redirect('login')
         
-        return render(request, self.template_name, data)
+        return render(request, self.template_name, {'form': form})
 
 class LoginView(DjangoLoginView):
     template_name = 'login.html'
