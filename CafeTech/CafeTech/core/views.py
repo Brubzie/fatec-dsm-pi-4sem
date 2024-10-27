@@ -13,9 +13,8 @@ from django.contrib import messages
 from CafeTech.settings import YOUR_GOOGLE_CLIENT_ID
 from google.oauth2 import id_token
 from google.auth.transport import requests
-import json, time
+import json
 from django.views.decorators.csrf import csrf_exempt
-
 
 class IndexView(View):
     template_name = 'index.html'
@@ -23,7 +22,6 @@ class IndexView(View):
     def get(self, request):
         data = {'user': request.user}
         return render(request, self.template_name, data)
-
 
 class RegisterView(View):
     template_name = 'register.html'
@@ -38,32 +36,43 @@ class RegisterView(View):
         if form.is_valid():
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
-            confirm_password = form.cleaned_data.get('confirm_password')
+            email = form.cleaned_data.get('email')
 
-            if username and password and confirm_password and password == confirm_password:
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Nome de usuário já existe.')
+            elif User.objects.filter(email=email).exists():
+                messages.error(request, 'Email já está em uso.')
+            else:
                 user = User.objects.create_user(
                     username=username,
-                    password=password
+                    password=password,
+                    email=email
                 )
-                if user:
-                    messages.success(request, 'Registro bem-sucedido! Faça login.')
-                    return HttpResponseRedirect(reverse('login'))
+                messages.success(request, 'Registro bem-sucedido! Faça login.')
+                return HttpResponseRedirect(reverse('login'))
 
         data = {
             'form': form,
             'error': 'Erro no registro. Verifique as informações e tente novamente.'
         }
+        
         return render(request, self.template_name, data)
-
 
 class LoginView(DjangoLoginView):
     template_name = 'login.html'
     form_class = LoginForm
 
+    def get_form_kwargs(self):
+        """Retorna os argumentos que serão passados para o formulário."""
+        kwargs = super().get_form_kwargs()
+        # Remove o request dos kwargs se estiver presente
+        kwargs.pop('request', None)
+        return kwargs
+
     def form_valid(self, form):
         """Se o formulário for válido, faça o login do usuário e redirecione"""
         login(self.request, form.get_user())
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('homeClient'))
 
     def form_invalid(self, form):
         """Se o formulário for inválido, renderize a página com os erros"""
@@ -73,7 +82,7 @@ class LoginView(DjangoLoginView):
         })
 
     def post(self, request, *args, **kwargs):
-        form = self.get_form(self.form_class)  # Não passa request para o formulário
+        form = self.form_class(request.POST)
         if form.is_valid():
             return self.form_valid(form)
         else:
@@ -87,13 +96,11 @@ class HomeClientView(View):
         messages.info(request, 'Bem-vindo de volta!')
         return render(request, self.template_name, {'user': request.user})
 
-
 class HistoryClientView(LoginRequiredMixin, View):
     template_name = 'historyClient.html'
 
     def get(self, request):
         return render(request, self.template_name)
-
 
 class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
@@ -101,34 +108,35 @@ class LogoutView(LoginRequiredMixin, View):
         messages.info(request, 'Você foi desconectado com sucesso.')
         return HttpResponseRedirect(reverse('login'))
 
-
 def handler404(request, *args, **argv):
     response = render(request, '404.html', {})
     response.status_code = 404
     return response
-
 
 def handler500(request, *args, **argv):
     response = render(request, '500.html', {})
     response.status_code = 500
     return response
 
-
-@csrf_exempt
 def google_login(request):
     template_name = 'homeClient.html'
-
-    time.sleep(3)
-    token = request.body
-    token = token.decode('utf-8')
-    token = json.loads(token)['id_token']
+    token = request.body.decode('utf-8')
+    token = json.loads(token).get('id_token')
 
     try:
         idinfo = id_token.verify_oauth2_token(token, requests.Request(), YOUR_GOOGLE_CLIENT_ID)
         userid = idinfo['sub']
-        print(idinfo)
-        # Aqui você pode adicionar lógica para autenticar o usuário no Django
+        email = idinfo['email']
+
+        user, created = User.objects.get_or_create(username=userid, defaults={'email': email})
+        if created:
+            user.set_password(User.objects.make_random_password())  # Define uma senha aleatória
+            user.save()
+        
+        login(request, user)
+        messages.success(request, 'Login com Google realizado com sucesso!')
+        return HttpResponseRedirect(reverse('homeClient'))
+        
     except ValueError:
         messages.error(request, 'Falha na autenticação do Google.')
-
-    return render(request, template_name)
+        return render(request, template_name)
