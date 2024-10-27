@@ -141,25 +141,38 @@ def handler500(request):
     return response
 
 
-def google_login(request):
+def google_login(self, request):
+    # Extrair o token do corpo da requisição
     token = json.loads(request.body.decode("utf-8")).get("id_token")
+
     try:
+        # Verificar o token de ID
         idinfo = id_token.verify_oauth2_token(
             token, requests.Request(), settings.YOUR_GOOGLE_CLIENT_ID
         )
-        userid = idinfo["sub"]
-        email = idinfo.get("email")
 
+        userid = idinfo["sub"]  # ID do usuário no Google
+        email = idinfo.get("email")  # Email do usuário
+
+        # Obter ou criar o usuário
         user, created = User.objects.get_or_create(
             username=userid, defaults={"email": email}
         )
+
+        # Se o usuário foi criado, defina uma senha aleatória
         if created:
             user.set_password(User.objects.make_random_password())
             user.save()
 
+        # Fazer o login do usuário
         login(request, user)
+
+        # Mensagem de sucesso
         messages.success(request, "Login com Google realizado com sucesso!")
+
+        # Retornar uma resposta de sucesso
         return JsonResponse({"message": "Login realizado com sucesso!"})
 
     except ValueError:
+        # Em caso de erro de verificação do token
         return JsonResponse({"error": "Falha na autenticação do Google"}, status=400)

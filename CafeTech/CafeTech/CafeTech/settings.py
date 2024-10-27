@@ -19,8 +19,7 @@ DEBUG = env("DEBUG")  # Carrega o valor de DEBUG
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
-# Application definition
-
+# Definição de Aplicativos
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -28,15 +27,30 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.sites",
     "core",
     # Django Allauth
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    # Django Rest Framework
+    "rest_framework",
+    "rest_framework.authtoken",
+    "rest_auth",
+    "rest_auth.registration",
 ]
 
 SITE_ID = 1
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": env.str("YOUR_GOOGLE_CLIENT_ID", ""),
+            "secret": env.str("GOOGLE_SECRET_KEY", ""),
+        },
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -46,7 +60,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # Middleware account
+    # Middleware Account
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -63,7 +77,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # 'allauth'
+                # Django Allauth
                 "django.template.context_processors.request",
             ],
         },
@@ -72,10 +86,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "CafeTech.wsgi.application"
 
-
 # Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
 DATABASES = {
     "default": env.db(default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3"))
 }
@@ -86,8 +97,6 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -114,25 +123,16 @@ CACHES = {
     ),  # Use o valor padão para Redis
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+# Internacionalização
 LANGUAGE_CODE = "pt-br"
-
 TIME_ZONE = "America/Sao_Paulo"
-
 USE_I18N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
 STATIC_URL = "static/"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
+# Tipo de campo de chave primária padrão
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Configurações de autenticação
@@ -142,8 +142,6 @@ LOGIN_URL = "/login/"
 
 # Adiciona '/' no final dos urls que não o tiverem
 APPEND_SLASH = True
-
-YOUR_GOOGLE_CLIENT_ID = env("YOUR_GOOGLE_CLIENT_ID")
 
 # Configuração de política de segurança para pop-ups cross-origin
 SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
