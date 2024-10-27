@@ -42,7 +42,7 @@ class RegisterForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'phone_number', 'password', 'confirm_password']
+        fields = ['username', 'email', 'password']
         labels = {
             'username': 'Usuário',
             'password': 'Senha',
@@ -99,22 +99,8 @@ class RegisterForm(forms.ModelForm):
             raise ValidationError('O número de telefone deve estar no formato (99) 99999-9999 ou (99) 9999-9999.')
         return phone_number
 
+
 class LoginForm(forms.Form):
-    class Meta:
-        model = User
-        fields = ['username', 'password']
-        labels = {
-            'username': 'Usuário',
-            'password': 'Senha',
-        }
-        
-        widgets = {
-            'username': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Digite seu usuário',
-            }),
-        }
-    
     username = forms.CharField(
         max_length=150, 
         required=True, 
