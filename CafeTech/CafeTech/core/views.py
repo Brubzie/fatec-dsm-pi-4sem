@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth import logout, login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.views import LoginView as DjangoLoginView
@@ -10,70 +10,89 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from CafeTech.settings import YOUR_GOOGLE_CLIENT_ID
+from django.conf import settings
 from google.oauth2 import id_token
 from google.auth.transport import requests
 import json
 
+
 class IndexView(View):
-    template_name = 'index.html'
+    template_name = "index.html"
 
     def get(self, request):
-        data = {'user': request.user}
+        data = {"user": request.user}
         return render(request, self.template_name, data)
+
 
 class RegisterView(View):
-    template_name = 'register.html'
+    template_name = "register.html"
 
     def get(self, request):
-        data = {'form': RegisterForm()}
-        return render(request, self.template_name, data)
+        form = RegisterForm()
+        context = {
+            "form": form,
+            "YOUR_GOOGLE_CLIENT_ID": settings.YOUR_GOOGLE_CLIENT_ID,
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request):
         form = RegisterForm(request.POST)
 
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            email = form.cleaned_data.get('email')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            email = form.cleaned_data.get("email")
+            phone_number = form.cleaned_data.get("phone_number")
 
+            # Verifica se as senhas coincidem
             if User.objects.filter(username=username).exists():
-                messages.error(request, 'Nome de usuário já existe.')
+                messages.error(request, "Nome de usuário já existe.")
+            # Verifica se o email é válido
             elif User.objects.filter(email=email).exists():
-                messages.error(request, 'Email já está em uso.')
+                messages.error(request, "Email já está em uso.")
+            # Verifica se o número de telefone é válido
+            elif User.objects.filter(phone_number=phone_number).exists():
+                messages.error(request, "Número de telefone já está em uso.")
             else:
                 User.objects.create_user(
-                    username=username,
-                    password=password,
-                    email=email
+                    username=username, password=password, email=email
                 )
-                messages.success(request, 'Registro bem-sucedido! Faça login.')
-                return redirect('login')
-        
-        return render(request, self.template_name, {'form': form})
+                messages.success(request, "Registro bem-sucedido! Faça login.")
+                return redirect("login")
+
+        return render(request, self.template_name, {"form": form})
+
 
 class LoginView(DjangoLoginView):
-    template_name = 'login.html'
+    template_name = "login.html"
     form_class = LoginForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["YOUR_GOOGLE_CLIENT_ID"] = (
+            settings.YOUR_GOOGLE_CLIENT_ID
+        )  # Passe o client ID do Google
+        return context
 
     def get_form_kwargs(self):
         """Retorna os argumentos que serão passados para o formulário."""
         kwargs = super().get_form_kwargs()
         # Remove o request dos kwargs se estiver presente
-        kwargs.pop('request', None)
+        kwargs.pop("request", None)
         return kwargs
 
     def form_valid(self, form):
         """Se o formulário for válido, faça o login do usuário e redirecione"""
         login(self.request, form.get_user())
-        return HttpResponseRedirect(reverse('homeClient'))
+        return HttpResponseRedirect(reverse("homeClient"))
 
     def form_invalid(self, form):
         """Se o formulário for inválido, renderize a página com os erros"""
-        return render(self.request, self.template_name, {
-            'form': form,
-            'error': 'Usuário ou senha inválidos'
-        })
+        return render(
+            self.request,
+            self.template_name,
+            {"form": form, "error": "Usuário ou senha inválidos"},
+        )
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -82,55 +101,61 @@ class LoginView(DjangoLoginView):
         else:
             return self.form_invalid(form)
 
-@method_decorator(login_required(login_url='/login/'), name='dispatch')
+
+@method_decorator(login_required(login_url="/login/"), name="dispatch")
 class HomeClientView(View):
-    template_name = 'homeClient.html'
+    template_name = "homeClient.html"
 
     def get(self, request):
-        messages.info(request, 'Bem-vindo de volta!')
-        return render(request, self.template_name, {'user': request.user})
+        messages.info(request, "Bem-vindo de volta!")
+        return render(request, self.template_name, {"user": request.user})
+
 
 class HistoryClientView(LoginRequiredMixin, View):
-    template_name = 'historyClient.html'
+    template_name = "historyClient.html"
 
     def get(self, request):
         return render(request, self.template_name)
 
+
 class LogoutView(LoginRequiredMixin, View):
     def get(self, request):
         logout(request)
-        messages.info(request, 'Você foi desconectado com sucesso.')
-        return HttpResponseRedirect(reverse('login'))
+        messages.info(request, "Você foi desconectado com sucesso.")
+        return HttpResponseRedirect(reverse("login"))
 
-def handler404(request, *args, **argv):
-    response = render(request, '404.html', {})
+
+def handler404(request):
+    response = render(request, "404.html", {})
     response.status_code = 404
     return response
 
-def handler500(request, *args, **argv):
-    response = render(request, '500.html', {})
+
+def handler500(request):
+    response = render(request, "500.html", {})
     response.status_code = 500
     return response
 
+
 def google_login(request):
-    template_name = 'homeClient.html'
-    token = request.body.decode('utf-8')
-    token = json.loads(token).get('id_token')
-
+    token = json.loads(request.body.decode("utf-8")).get("id_token")
     try:
-        idinfo = id_token.verify_oauth2_token(token, requests.Request(), YOUR_GOOGLE_CLIENT_ID)
-        userid = idinfo['sub']
-        email = idinfo['email']
+        idinfo = id_token.verify_oauth2_token(
+            token, requests.Request(), settings.YOUR_GOOGLE_CLIENT_ID
+        )
+        userid = idinfo["sub"]
+        email = idinfo.get("email")
 
-        user, created = User.objects.get_or_create(username=userid, defaults={'email': email})
+        user, created = User.objects.get_or_create(
+            username=userid, defaults={"email": email}
+        )
         if created:
-            user.set_password(User.objects.make_random_password())  # Define uma senha aleatória
+            user.set_password(User.objects.make_random_password())
             user.save()
-        
+
         login(request, user)
-        messages.success(request, 'Login com Google realizado com sucesso!')
-        return HttpResponseRedirect(reverse('homeClient'))
-        
+        messages.success(request, "Login com Google realizado com sucesso!")
+        return JsonResponse({"message": "Login realizado com sucesso!"})
+
     except ValueError:
-        messages.error(request, 'Falha na autenticação do Google.')
-        return render(request, template_name)
+        return JsonResponse({"error": "Falha na autenticação do Google"}, status=400)
