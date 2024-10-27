@@ -34,11 +34,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
-    # Django Rest Framework
-    "rest_framework",
-    "rest_framework.authtoken",
-    "rest_auth",
-    "rest_auth.registration",
 ]
 
 SITE_ID = 1
