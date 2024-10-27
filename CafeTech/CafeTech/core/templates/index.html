@@ -8,62 +8,47 @@
 
 <!-- Conteúdo da página -->
 {% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h1>Faça parte do clube do café</h1>
+        <p class="lead">Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
+        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
+    </div>
+    <div class="text-center">
+        <img src="{% static 'images/Index_CoffeeClub.jpg' %}" class="img-fluid" alt="Clube do Café">
+    </div>
+</div>
 
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8 text-center">
-            <div class="card shadow-lg p-4 cafetech">
-                {% if user.is_authenticated %}
-                    <h2 class="mb-4">Olá, <b>{{ request.user.username }}</b>!</h2>
-                    <p class="lead">Seja bem-vindo(a) de volta!</p>
-                    <div class="d-flex justify-content-center">
-                        <a href="{% url 'logout' %}" class="btn btn-danger m-2">Sair</a>
-                    </div>
-                {% else %}
-                    <h2 class="mb-4">Bem-vindo ao CafeTech!</h2>
-                    <p class="lead">Por favor, faça seu registro ou login para continuar.</p>
-                    <div class="d-flex justify-content-center">
-                        <a href="{% url 'register' %}" class="btn btn-success m-2">Registrar</a>
-                        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
-                    </div>
-                {% endif %}
+    <h2 class="text-center mb-4">Vantagens do Clube</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card advantage-container">
+                <img src="{% static 'images/Card1_Coffee.jpg' %}" class="card-img-top" alt="vantagem 1" height="250px">
+                <div class="card-body">
+                    <h5 class="card-title advantage-title">Café</h5>
+                    <p class="card-text advantage-desc">Garanta o seu café de cada dia para sobreviver ao dia.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card advantage-container">
+                <img src="{% static 'images/Card2_Networking.jpg' %}" class="card-img-top" alt="vantagem 2" height="250px">
+                <div class="card-body">
+                    <h5 class="card-title advantage-title">Networking</h5>
+                    <p class="card-text advantage-desc">Estabeleça conexões que podem te ajudar futuramente.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card advantage-container">
+                <img src="{% static 'images/Card3_Support.jpg' %}" class="card-img-top" alt="vantagem 3" height="250px">
+                <div class="card-body">
+                    <h5 class="card-title advantage-title">Trocas</h5>
+                    <p class="card-text advantage-desc">Exponha seus problemas e dúvidas, obtenha ajuda, e também ajude se puder.</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-<div>
-    <div>
-        <h1>Faça parte do clube do café</h1>
-        <p>Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
-        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
-    </div>
-    <img src="{% static 'images/Index_CoffeeClub.jpg' %}" width="100%" height="auto" max-width="500px">
-</div>
-
-<div>
-    <h2>Vantagens do Clube</h2>
-    <div class="card advantage-container" style="width: 18rem;">
-        <img src="{% static 'images/Card1_Coffee.jpg' %}" class="card-img-top" alt="vantagem 1" height="250px">
-        <div class="card-body">
-            <h5 class="card-title advantage-title">Café</h5>
-            <p class="card-text advantage-desc">Garanta o seu café de cada dia para sobreviver ao dia.</p>
-        </div>
-    </div>
-    <div class="card advantage-container" style="width: 18rem;">
-        <img src="{% static 'images/Card2_Networking.jpg' %}" class="card-img-top" alt="vantagem 2" height="250px">
-        <div class="card-body">
-            <h5 class="card-title advantage-title">Networking</h5>
-            <p class="card-text advantage-desc">Estabeleça conexões que podem te ajudar futuramente.</p>
-        </div>
-    </div>
-    <div class="card advantage-container" style="width: 18rem;">
-        <img src="{% static 'images/Card3_Support.jpg' %}" class="card-img-top" alt="vantagem 3" height="250px">
-        <div class="card-body">
-            <h5 class="card-title advantage-title">Trocas</h5>
-            <p class="card-text advantage-desc">Exponha seus problemas e dúvidas, obtenha ajuda, e também ajude se puder.</p>
-        </div>
-    </div>
-</div>
-
 {% endblock content %}
