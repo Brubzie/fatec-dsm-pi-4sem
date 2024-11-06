@@ -21,6 +21,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
 
 # Definição de Aplicativos
 INSTALLED_APPS = [
+    # Django Apps
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -28,12 +29,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
-    "core",
     # Django Allauth
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    # Local Apps
+    "core",
 ]
 
 SITE_ID = 1
@@ -42,7 +44,7 @@ SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {
             "client_id": env.str("YOUR_GOOGLE_CLIENT_ID", ""),
-            "secret": env.str("GOOGLE_SECRET_KEY", ""),
+            "secret": env.str("YOUR_GOOGLE_CLIENT_SECRET", ""),
         },
     },
 }
@@ -112,10 +114,7 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "cache_table",
-    },
-    "redis": env.cache_url(
-        "REDIS_URL", default="redis://127.0.0.1:6379/1"
-    ),  # Use o valor padão para Redis
+    }
 }
 
 # Internacionalização
