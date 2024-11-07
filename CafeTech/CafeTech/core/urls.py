@@ -19,4 +19,5 @@ urlpatterns = [
     path("home/", HomeClientView.as_view(), name="home"),
     path("history/", HistoryClientView.as_view(), name="history"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    # path("google-login", views.google_login, name="google-login"),
 ]

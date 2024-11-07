@@ -142,37 +142,36 @@ def handler500(request):
 
 
 def google_login(self, request):
-    # Extrair o token do corpo da requisição
-    token = json.loads(request.body.decode("utf-8")).get("id_token")
+    if request.method == 'POST':
+        token = json.loads(request.body.decode('utf-8')).get('id_token')
 
-    try:
-        # Verificar o token de ID
-        idinfo = id_token.verify_oauth2_token(
-            token, requests.Request(), settings.YOUR_GOOGLE_CLIENT_ID
-        )
+        try:
+            # Verifica o token do Google
+            idinfo = id_token.verify_oauth2_token(
+                token, requests.Request(), settings.YOUR_GOOGLE_CLIENT_ID
+            )
 
-        userid = idinfo["sub"]  # ID do usuário no Google
-        email = idinfo.get("email")  # Email do usuário
+            userid = idinfo['sub']
+            email = idinfo.get('email')
 
-        # Obter ou criar o usuário
-        user, created = User.objects.get_or_create(
-            username=userid, defaults={"email": email}
-        )
+            # Tenta obter ou criar o usuário
+            user, created = User.objects.get_or_create(
+                username=userid, defaults={'email': email}
+            )
 
-        # Se o usuário foi criado, defina uma senha aleatória
-        if created:
-            user.set_password(User.objects.make_random_password())
-            user.save()
+            # Caso o usuário tenha sido criado, define uma senha aleatória
+            if created:
+                user.set_password(User.objects.make_random_password())
+                user.save()
 
-        # Fazer o login do usuário
-        login(request, user)
+            # Realiza o login do usuário
+            login(request, user)
+            messages.success(request, "Login com Google realizado com sucesso!")
 
-        # Mensagem de sucesso
-        messages.success(request, "Login com Google realizado com sucesso!")
+            # Redireciona para a página inicial do usuário
+            return JsonResponse({"message": "Login realizado com sucesso!"})
 
-        # Retornar uma resposta de sucesso
-        return JsonResponse({"message": "Login realizado com sucesso!"})
+        except ValueError:
+            # Caso o token seja inválido
+            return JsonResponse({"error": "Falha na autenticação do Google"}, status=400)
 
-    except ValueError:
-        # Em caso de erro de verificação do token
-        return JsonResponse({"error": "Falha na autenticação do Google"}, status=400)
