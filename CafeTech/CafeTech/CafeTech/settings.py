@@ -40,14 +40,8 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "APP": {
-            "client_id": env.str("YOUR_GOOGLE_CLIENT_ID", ""),
-            "secret": env.str("YOUR_GOOGLE_CLIENT_SECRET", ""),
-        },
-    },
-}
+YOUR_GOOGLE_CLIENT_ID = env("YOUR_GOOGLE_CLIENT_ID")
+YOUR_GOOGLE_CLIENT_SECRET = env("YOUR_GOOGLE_CLIENT_SECRET")
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
