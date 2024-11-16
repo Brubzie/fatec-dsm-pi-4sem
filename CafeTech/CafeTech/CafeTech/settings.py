@@ -34,14 +34,31 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    # Django Rest Framework
+    "rest_framework",
+    "rest_framework.authtoken",
     # Local Apps
     "core",
 ]
 
+# Configuração de Django Rest Framework
+REST_AUTH = {
+    "TOKEN_MODEL": None,  # Desativa o modelo de token padrão
+}
+
 SITE_ID = 1
 
-YOUR_GOOGLE_CLIENT_ID = env("YOUR_GOOGLE_CLIENT_ID")
-YOUR_GOOGLE_CLIENT_SECRET = env("YOUR_GOOGLE_CLIENT_SECRET")
+YOUR_GOOGLE_CLIENT_ID = env.str("YOUR_GOOGLE_CLIENT_ID", "")
+YOUR_GOOGLE_SECRET_KEY = env.str("YOUR_GOOGLE_SECRET_KEY", "")
+
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": env.str("YOUR_GOOGLE_CLIENT_ID", ""),
+            "secret": env.str("YOUR_GOOGLE_SECRET_KEY", ""),
+        },
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -60,7 +77,7 @@ ROOT_URLCONF = "CafeTech.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

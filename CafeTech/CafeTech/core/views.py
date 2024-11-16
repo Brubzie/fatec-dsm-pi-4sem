@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth import logout, login
-from django.http import HttpResponseRedirect, JsonResponse
-from django.urls import reverse
+from django.contrib.auth import logout, login, authenticate
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
 from .forms import RegisterForm, LoginForm
 from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,10 +11,11 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.conf import settings
-from google.oauth2 import id_token
-from google.auth.transport import requests
 from datetime import datetime
-import json
+from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
+from dj_rest_auth.registration.serializers import SocialLoginSerializer
+from django.views.generic.edit import FormView
 
 
 class IndexView(View):
@@ -24,6 +25,7 @@ class IndexView(View):
         data = {
             "user": request.user,
             "current_year": datetime.now().year,
+            "YOUR_GOOGLE_CLIENT_ID": settings.YOUR_GOOGLE_CLIENT_ID,
         }
         return render(request, self.template_name, data)
 
@@ -31,45 +33,31 @@ class IndexView(View):
 class RegisterView(View):
     template_name = "register.html"
 
+    def get_context_data(self, **kwargs):
+        context = kwargs
+        context["YOUR_GOOGLE_CLIENT_ID"] = settings.YOUR_GOOGLE_CLIENT_ID
+        return context
+
     def get(self, request):
         form = RegisterForm()
-        context = {
-            "form": form,
-            "YOUR_GOOGLE_CLIENT_ID": settings.YOUR_GOOGLE_CLIENT_ID,
-        }
+        context = self.get_context_data(form=form)
         return render(request, self.template_name, context)
 
     def post(self, request):
         form = RegisterForm(request.POST)
-
         if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
-            email = form.cleaned_data.get("email")
-            phone_number = form.cleaned_data.get("phone_number")
-
-            # Verifica se as senhas coincidem
-            if User.objects.filter(username=username).exists():
-                messages.error(request, "Nome de usuário já existe.")
-            # Verifica se o email é válido
-            elif User.objects.filter(email=email).exists():
-                messages.error(request, "Email já está em uso.")
-            # Verifica se o número de telefone é válido
-            elif User.objects.filter(phone_number=phone_number).exists():
-                messages.error(request, "Número de telefone já está em uso.")
-            else:
-                User.objects.create_user(
-                    username=username, password=password, email=email
-                )
-                messages.success(request, "Registro bem-sucedido! Faça login.")
-                return redirect("login")
-
-        return render(request, self.template_name, {"form": form})
+            form.save()  # Salva o usuário diretamente no banco
+            messages.success(request, "Registro bem-sucedido! Faça login.")
+            return redirect("login")
+        else:
+            messages.error(request, "Corrija os erros no formulário.")
+        return render(request, self.template_name, self.get_context_data(form=form))
 
 
-class LoginView(DjangoLoginView):
+class LoginView(FormView):
     template_name = "login.html"
     form_class = LoginForm
+    success_url = reverse_lazy("homeClient")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -78,24 +66,27 @@ class LoginView(DjangoLoginView):
         )  # Passe o client ID do Google
         return context
 
-    def get_form_kwargs(self):
-        """Retorna os argumentos que serão passados para o formulário."""
-        kwargs = super().get_form_kwargs()
-        # Remove o request dos kwargs se estiver presente
-        kwargs.pop("request", None)
-        return kwargs
-
     def form_valid(self, form):
         """Se o formulário for válido, faça o login do usuário e redirecione"""
-        login(self.request, form.get_user())
-        return HttpResponseRedirect(reverse("homeClient"))
+        username = form.cleaned_data.get("username")
+        password = form.cleaned_data.get("password")
+        user = authenticate(self.request, username=username, password=password)
+        if user:
+            login(self.request, user)
+            return redirect(self.get_success_url())
+        else:
+            form.add_error(None, "Credenciais inválidas")
+            return self.form_invalid(form)
 
     def form_invalid(self, form):
         """Se o formulário for inválido, renderize a página com os erros"""
         return render(
             self.request,
             self.template_name,
-            {"form": form, "error": "Usuário ou senha inválidos"},
+            {
+                "form": form,
+                "error": form.errors,
+            },
         )
 
     def post(self, request, *args, **kwargs):
@@ -111,22 +102,24 @@ class HomeClientView(View):
     template_name = "homeClient.html"
 
     def get(self, request):
-        messages.info(request, "Bem-vindo de volta!")
+        if not messages.get_messages(request):
+            messages.info(request, "Bem-vindo de volta!")
         return render(request, self.template_name, {"user": request.user})
 
 
 class HistoryClientView(LoginRequiredMixin, View):
+    login_url = "/login/"
     template_name = "historyClient.html"
 
     def get(self, request):
         return render(request, self.template_name)
 
 
-class LogoutView(LoginRequiredMixin, View):
-    def get(self, request):
-        logout(request)
-        messages.info(request, "Você foi desconectado com sucesso.")
-        return HttpResponseRedirect(reverse("login"))
+@login_required(login_url="/login/")
+def logout_view(request):
+    logout(request)
+    messages.info(request, "Você foi desconectado com sucesso.")
+    return HttpResponseRedirect(reverse("login"))
 
 
 def handler404(request):
@@ -141,37 +134,6 @@ def handler500(request):
     return response
 
 
-def google_login(self, request):
-    if request.method == 'POST':
-        token = json.loads(request.body.decode('utf-8')).get('id_token')
-
-        try:
-            # Verifica o token do Google
-            idinfo = id_token.verify_oauth2_token(
-                token, requests.Request(), settings.YOUR_GOOGLE_CLIENT_ID
-            )
-
-            userid = idinfo['sub']
-            email = idinfo.get('email')
-
-            # Tenta obter ou criar o usuário
-            user, created = User.objects.get_or_create(
-                username=userid, defaults={'email': email}
-            )
-
-            # Caso o usuário tenha sido criado, define uma senha aleatória
-            if created:
-                user.set_password(User.objects.make_random_password())
-                user.save()
-
-            # Realiza o login do usuário
-            login(request, user)
-            messages.success(request, "Login com Google realizado com sucesso!")
-
-            # Redireciona para a página inicial do usuário
-            return JsonResponse({"message": "Login realizado com sucesso!"})
-
-        except ValueError:
-            # Caso o token seja inválido
-            return JsonResponse({"error": "Falha na autenticação do Google"}, status=400)
-
+class google_login(SocialLoginView):
+    adapter_class = GoogleOAuth2Adapter
+    serializer_class = SocialLoginSerializer
