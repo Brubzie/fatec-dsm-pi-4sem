@@ -1,38 +1,41 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.contrib.auth.models import User
 from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .forms import RegisterForm, LoginForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from django.conf import settings
 from datetime import datetime
 from django.views.generic.edit import FormView
+from .forms import RegisterForm, LoginForm
 
 
 class IndexView(View):
+    """
+    Página inicial do sistema.
+    Exibe informações básicas.
+    """
     template_name = "index.html"
 
     def get(self, request):
-        data = {
+        context = {
             "user": request.user,
             "current_year": datetime.now().year,
-            "YOUR_GOOGLE_CLIENT_ID": settings.YOUR_GOOGLE_CLIENT_ID,
         }
-        return render(request, self.template_name, data)
+        return render(request, self.template_name, context)
 
 
 class RegisterView(View):
+    """
+    View para registro de novos usuários.
+    Renderiza o formulário de registro e processa a submissão.
+    """
     template_name = "register.html"
 
     def get_context_data(self, **kwargs):
-        context = kwargs
-        context["YOUR_GOOGLE_CLIENT_ID"] = settings.YOUR_GOOGLE_CLIENT_ID
-        return context
+        return kwargs
 
     def get(self, request):
         form = RegisterForm()
@@ -42,7 +45,7 @@ class RegisterView(View):
     def post(self, request):
         form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save()  # Salva o usuário diretamente no banco
+            form.save()  # Salva o usuário e o perfil associado
             messages.success(request, "Registro bem-sucedido! Faça login.")
             return redirect("login")
         else:
@@ -51,50 +54,43 @@ class RegisterView(View):
 
 
 class LoginView(FormView):
+    """
+    View para login de usuários.
+    Valida as credenciais e autentica o usuário no sistema.
+    """
     template_name = "login.html"
     form_class = LoginForm
     success_url = reverse_lazy("homeClient")
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["YOUR_GOOGLE_CLIENT_ID"] = (
-            settings.YOUR_GOOGLE_CLIENT_ID
-        )  # Passe o client ID do Google
-        return context
+        return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        """Se o formulário for válido, faça o login do usuário e redirecione"""
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
         user = authenticate(self.request, username=username, password=password)
         if user:
             login(self.request, user)
+            messages.success(self.request, "Login realizado com sucesso!")
             return redirect(self.get_success_url())
         else:
             form.add_error(None, "Credenciais inválidas")
             return self.form_invalid(form)
 
     def form_invalid(self, form):
-        """Se o formulário for inválido, renderize a página com os erros"""
         return render(
             self.request,
             self.template_name,
-            {
-                "form": form,
-                "error": form.errors,
-            },
+            {"form": form, "error": form.errors},
         )
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
 
 
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
 class HomeClientView(View):
+    """
+    Página inicial do cliente autenticado.
+    Exibe uma mensagem de boas-vindas.
+    """
     template_name = "homeClient.html"
 
     def get(self, request):
@@ -103,7 +99,11 @@ class HomeClientView(View):
         return render(request, self.template_name, {"user": request.user})
 
 
-class HistoryClientView(LoginRequiredMixin, View):
+class SettingsClientView(LoginRequiredMixin, View):
+    """
+    Página de histórico do cliente.
+    Apenas acessível por usuários autenticados.
+    """
     login_url = "/login/"
     template_name = "historyClient.html"
 
@@ -113,6 +113,10 @@ class HistoryClientView(LoginRequiredMixin, View):
 
 @login_required(login_url="/login/")
 def logout_view(request):
+    """
+    View para logout do sistema.
+    Redireciona para a página de login após encerrar a sessão do usuário.
+    """
     logout(request)
     messages.info(request, "Você foi desconectado com sucesso.")
     return HttpResponseRedirect(reverse("login"))
