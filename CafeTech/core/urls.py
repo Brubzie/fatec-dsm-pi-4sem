@@ -4,13 +4,9 @@ from .views import (
     RegisterView,
     LoginView,
     HomeClientView,
-    HistoryClientView,
+    SettingsClientView,
     logout_view,
 )
-
-# Definindo os handlers de erro
-handler404 = "core.views.handler404"
-handler500 = "core.views.handler500"
 
 # URLs principais
 urlpatterns = [
@@ -22,5 +18,5 @@ urlpatterns = [
     path("logout/", logout_view, name="logout"),
     # Páginas do cliente
     path("home/", HomeClientView.as_view(), name="home"),
-    path("history/", HistoryClientView.as_view(), name="history"),
+    path("settings/", SettingsClientView.as_view(), name="settings"),
 ]
