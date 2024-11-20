@@ -1,5 +1,6 @@
 <!-- Template base -->
 {% extends 'base.html' %}
+{% load static %}
 
 <!-- Título da página -->
 {% block page_title %}
@@ -8,5 +9,28 @@
 
 <!-- Conteúdo da página -->
 {% block content %}
-
+    <div class="container mt-5">
+        <div class="text-center">
+            <h1>Bem-vindo à CafeTech!</h1>
+            <p class="mt-3">
+                A <strong>CafeTech</strong> é uma empresa inovadora dedicada a unir tecnologia e conforto. 
+                Nosso objetivo é proporcionar soluções digitais eficientes enquanto promovemos um ambiente acolhedor 
+                e conectado para nossos clientes. Inspirados pela pausa para um bom café, buscamos oferecer experiências 
+                marcantes e de alta qualidade.
+            </p>
+        </div>
+        <div class="row mt-5">
+            <div class="col-md-6">
+                <img src="{% static 'images/empresa.jpeg' %}" alt="Sobre a CafeTech" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <p>
+                    Com uma equipe apaixonada e criativa, trabalhamos para tornar a tecnologia mais acessível e 
+                    prática no dia a dia. Desde desenvolvimento de sistemas até soluções personalizadas, a CafeTech 
+                    está sempre pronta para atender às suas necessidades e superar expectativas. 
+                    Vamos transformar seus desafios em oportunidades!
+                </p>
+            </div>
+        </div>
+    </div>
 {% endblock content %}

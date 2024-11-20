@@ -9,7 +9,8 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from datetime import datetime
 from django.views.generic.edit import FormView
-from .forms import RegisterForm, LoginForm
+from .forms import LoginForm, RegisterForm
+from django.contrib.auth.models import User
 
 
 class IndexView(View):
@@ -17,6 +18,7 @@ class IndexView(View):
     Página inicial do sistema.
     Exibe informações básicas.
     """
+
     template_name = "index.html"
 
     def get(self, request):
@@ -32,6 +34,7 @@ class RegisterView(View):
     View para registro de novos usuários.
     Renderiza o formulário de registro e processa a submissão.
     """
+
     template_name = "register.html"
 
     def get_context_data(self, **kwargs):
@@ -43,14 +46,26 @@ class RegisterView(View):
         return render(request, self.template_name, context)
 
     def post(self, request):
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()  # Salva o usuário e o perfil associado
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        phone_number = request.POST.get("phone_number")
+
+        user = User.objects.filter(username=username).first()
+
+        if user:
+            messages.error(request, "já existe um usuario com esse nome")
+            return render(request, "login.html")
+        else:
+            user = User.objects.create_user(
+                username=username,
+                email=email,
+                password=password,
+                phone_number=phone_number,
+            )
+            user.save()
             messages.success(request, "Registro bem-sucedido! Faça login.")
             return redirect("login")
-        else:
-            messages.error(request, "Corrija os erros no formulário.")
-        return render(request, self.template_name, self.get_context_data(form=form))
 
 
 class LoginView(FormView):
@@ -58,31 +73,32 @@ class LoginView(FormView):
     View para login de usuários.
     Valida as credenciais e autentica o usuário no sistema.
     """
+
     template_name = "login.html"
     form_class = LoginForm
     success_url = reverse_lazy("homeClient")
 
     def get_context_data(self, **kwargs):
-        return super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        return context
 
     def form_valid(self, form):
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
         user = authenticate(self.request, username=username, password=password)
+
         if user:
             login(self.request, user)
             messages.success(self.request, "Login realizado com sucesso!")
             return redirect(self.get_success_url())
         else:
-            form.add_error(None, "Credenciais inválidas")
+            # Adiciona um erro geral sem referência a campos específicos
+            messages.error(self.request, "Credenciais inválidas")
             return self.form_invalid(form)
 
     def form_invalid(self, form):
-        return render(
-            self.request,
-            self.template_name,
-            {"form": form, "error": form.errors},
-        )
+        # O Django já lida com a renderização dos erros automaticamente
+        return render(self.request, self.template_name, {"form": form})
 
 
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
@@ -91,6 +107,7 @@ class HomeClientView(View):
     Página inicial do cliente autenticado.
     Exibe uma mensagem de boas-vindas.
     """
+
     template_name = "homeClient.html"
 
     def get(self, request):
@@ -104,6 +121,7 @@ class SettingsClientView(LoginRequiredMixin, View):
     Página de histórico do cliente.
     Apenas acessível por usuários autenticados.
     """
+
     login_url = "/login/"
     template_name = "historyClient.html"
 
