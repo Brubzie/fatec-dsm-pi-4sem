@@ -68,9 +68,27 @@
         {% endif %}
 
         <!-- Conteúdo da página -->
-        <main class="container">
+        <main class="section container">
             {% block content %}{% endblock content %}
         </main>
+
+        <!-- Footer -->
+        <footer>
+            <div class=" footer-container">
+                <span class="copyright">© 2024 Cafetech. Todos os direitos reservados.</span>
+            
+                <div class="footer-contact_container">
+                    <span>Telefone: (19) 9999-9999 </span>
+                    <span>Email: cafetech.contato@gmail.com</span>
+                </div>
+            
+                <div class="footer-icon_container">
+                    <img src="{% static 'images/insta-icon.svg' %}" alt="instagram">
+                    <img src="{% static 'images/face-icon.svg' %}" alt="facebook">
+                    <img src="{% static 'images/linkedin-icon.svg' %}" alt="linkedin">
+                </div>
+            </div>
+        </footer>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>

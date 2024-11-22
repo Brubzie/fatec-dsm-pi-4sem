@@ -58,6 +58,16 @@
     background-color: #0056b3;
 }
 
+/* Estilo para as seções */
+.section {
+    padding: 40px 20px;
+    margin-bottom: 40px;
+}
+.section:last-child {
+    margin-bottom: 0;
+}
+
+/* Estilização da área Cafetech */
 .cafetech {
     background-color: #f5f5dc; /* Cor beige suave, semelhante à cor do café com leite */
     color: #3b2c1f; /* Cor marrom escuro, representando café */
@@ -71,4 +81,128 @@
 
 .cafetech:hover {
     background-color: #e3d9b5; /* Cor de fundo ao passar o mouse */
+}
+
+/* Feedback */
+.feedback-section {
+    background-color: #f4ede5; /* Fundo bege */
+    padding: 40px 20px;
+    border-top: 4px solid #d9a76d; /* Detalhe de cor de café */
+  }
+
+  .feedback-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #6b4423; /* Cor marrom de café */
+    margin-bottom: 20px;
+  }
+
+  .feedback-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .feedback-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 300px;
+    flex: 1 1 calc(33.33% - 20px); /* Flexível para 3 por linha */
+    min-width: 250px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .feedback-card:hover {
+    transform: scale(1.05);
+    }
+
+  .feedback-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #6b4423;
+  }
+
+  .feedback-card p {
+    margin: 10px 0;
+    color: #555;
+  }
+
+  .feedback-card .author {
+    font-style: italic;
+    color: #9a7b53; /* Cor mais clara de café */
+  }
+
+  .feedback-card .feedback-text {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+  @media (max-width: 768px) {
+    .feedback-card {
+      flex: 1 1 100%; /* Em telas menores, ocupa 100% */
+      margin-bottom: 20px;
+    }
+}
+
+/* Vantagens */
+.advantage-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Botões e Links */
+.btn {
+    margin: 10px;
+}
+
+/* Footer */
+.footer-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+    height: 294;
+    width: 100%;
+    border: 1px solid;
+    border-radius: 40px 40px 0 0;
+    background-color: #353739;
+}
+
+.footer-container .copyright{
+    margin-top: 30px;
+    color: #FFFFFF;
+    font-family: 'Inter';
+}
+
+.footer-contact_container{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+}
+
+.footer-contact_container span {
+    font-family: 'Inter';
+    color: #FFFFFF;
+    font-family: 'Inter';
+}
+
+.footer-icon_container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 50px;
+    margin-top: 20px;
+}
+
+.footer-icon_container img{
+    height: 57px;
+    width: 60px;
 }

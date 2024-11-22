@@ -32,38 +32,90 @@
     </div>
 </div>
 
-<div>
-    <div>
-        <h1>Faça parte do clube do café</h1>
-        <p>Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
-        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
-    </div>
-    <img src="{% static 'images/Index_CoffeeClub.jpg' %}" width="100%" height="auto" max-width="500px">
+<!-- Seção do Clube -->
+<div class="section">
+    <h1>Faça parte do clube do café</h1>
+    <p>Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
+    <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
+    <img src="{% static 'images/Index_CoffeeClub.jpg' %}" class="img-fluid rounded" alt="Clube do Café">
 </div>
 
-<div>
+<!-- Seção de Vantagens -->
+<div class="section">
     <h2>Vantagens do Clube</h2>
-    <div class="card advantage-container" style="width: 18rem;">
-        <img src="{% static 'images/Card1_Coffee.jpg' %}" class="card-img-top" alt="vantagem 1" height="250px">
-        <div class="card-body">
-            <h5 class="card-title advantage-title">Café</h5>
-            <p class="card-text advantage-desc">Garanta o seu café de cada dia para sobreviver ao dia.</p>
+    <div class="advantage-container card-group">
+        <div class="card advantage-container" style="width: 18rem;">
+            <img src="{% static 'images/Card1_Coffee.jpg' %}" class="card-img-top" alt="vantagem 1" height="250px">
+            <div class="card-body">
+                <h5 class="card-title advantage-title">Café</h5>
+                <p class="card-text advantage-desc">Garanta o seu café de cada dia para sobreviver ao dia.</p>
+            </div>
+        </div>
+        <div class="card advantage-container" style="width: 18rem;">
+            <img src="{% static 'images/Card2_Networking.jpg' %}" class="card-img-top" alt="vantagem 2" height="250px">
+            <div class="card-body">
+                <h5 class="card-title advantage-title">Networking</h5>
+                <p class="card-text advantage-desc">Estabeleça conexões que podem te ajudar futuramente.</p>
+            </div>
+        </div>
+        <div class="card advantage-container" style="width: 18rem;">
+            <img src="{% static 'images/Card3_Support.jpg' %}" class="card-img-top" alt="vantagem 3" height="250px">
+            <div class="card-body">
+                <h5 class="card-title advantage-title">Trocas</h5>
+                <p class="card-text advantage-desc">Exponha seus problemas e dúvidas, obtenha ajuda, e também ajude se puder.</p>
+            </div>
         </div>
     </div>
-    <div class="card advantage-container" style="width: 18rem;">
-        <img src="{% static 'images/Card2_Networking.jpg' %}" class="card-img-top" alt="vantagem 2" height="250px">
-        <div class="card-body">
-            <h5 class="card-title advantage-title">Networking</h5>
-            <p class="card-text advantage-desc">Estabeleça conexões que podem te ajudar futuramente.</p>
+</div>
+
+<!-- Seção do Chat Bot -->
+<div class="section">
+    <h2>Chat Bot</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h5 class="bot-title">Canal</h5>
+            <p class="bot-text">Fique por dentro das ações do clube, como: sorteios, café especial, confraternizações.</p>
+            <h5 class="bot-title">Consulta</h5>
+            <p class="bot-text">Consulte se sua situação está adimplente para tomar o cafézinho.</p>
+            <h5 class="bot-title">QR Code do mês</h5>
+            <p class="bot-text">Gere o QRCode que será sua carteirinha do clube do café, portando sua situação de adimplente.</p>
+            <h5 class="bot-title">Pagamento</h5>
+            <p class="bot-text">Faça o pagamento e envie o comprovante para atualizar sua situação.</p>
+            <div>
+                <a href="" class="btn btn-secondary m-2">Entrar no canal</a>
+                <a href="" class="btn btn-secondary m-2">Falar com Chat Bot</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <img src="{% static 'images/Image_ChatBot.jpg' %}" class="img-fluid rounded" alt="Chat Bot">
         </div>
     </div>
-    <div class="card advantage-container" style="width: 18rem;">
-        <img src="{% static 'images/Card3_Support.jpg' %}" class="card-img-top" alt="vantagem 3" height="250px">
-        <div class="card-body">
-            <h5 class="card-title advantage-title">Trocas</h5>
-            <p class="card-text advantage-desc">Exponha seus problemas e dúvidas, obtenha ajuda, e também ajude se puder.</p>
+</div>
+
+<!-- Seção de Feedback -->
+<div class="section feedback-section">
+    <h2>Feedback membros</h2>
+    <div class="feedback-container">
+        <div class="feedback-card">
+            <p class="feedback-text">"O Cafetech tornou minha experiência com cafés ainda mais especial. Adoro os sorteios e as interações!"</p>
+            <p class="feedback-author">— Ana Paula</p>
+        </div>
+        <div class="feedback-card">
+            <p class="feedback-text">"A plataforma é prática e o sistema de pontos é incrível! Recomendo a todos os amantes de café."</p>
+            <p class="feedback-author">— Carlos Eduardo</p>
+        </div>
+        <div class="feedback-card">
+            <p class="feedback-text">"Além do café delicioso, adoro o chatbot! Ele sempre responde minhas dúvidas rapidamente."</p>
+            <p class="feedback-author">— Mariana Silva</p>
         </div>
     </div>
+</div>
+
+<!-- Seção de Parceria -->
+<div class="section">
+    <h2>Seja parceiro</h2>
+    <h5>Divulgue seu produto conosco na comunidade mais conectada.</h5>
+    <a href="" class="btn btn-secondary m-2">E-mail</a>
 </div>
 
 {% endblock content %}
