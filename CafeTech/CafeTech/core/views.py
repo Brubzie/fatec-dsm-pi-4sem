@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout, authenticate, login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, EditUserForm
 from django.contrib.auth.views import LoginView as DjangoLoginView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -102,6 +102,14 @@ class LogoutView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('login'))
 
 
+class SocialView(View):
+    template_name = 'social.html'
+
+    def get(self, request):
+        data = {'user': request.user}
+        return render(request, self.template_name, data)
+
+
 def handler404(request, *args, **argv):
     response = render(request, '404.html', {})
     response.status_code = 404
@@ -132,3 +140,15 @@ def google_login(request):
         messages.error(request, 'Falha na autenticação do Google.')
 
     return render(request, template_name)
+
+@login_required
+def EditView(request):
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('../homeClient')
+    else:
+        form = EditUserForm(instance=request.user)
+    
+    return render(request, 'edit', {'form': form})

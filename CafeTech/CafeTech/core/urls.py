@@ -7,6 +7,8 @@ from .views import (
     HomeClientView,
     HistoryClientView,
     LogoutView,
+    SocialView,
+    EditView,
     handler404,
     handler500,
 )
@@ -22,4 +24,6 @@ urlpatterns = [
     path("home/", HomeClientView.as_view(), name="home"),
     path("history/", HistoryClientView.as_view(), name="history_client"),
     path("logout/", LogoutView.as_view(), name="logout"),
+    path("social/", SocialView.as_view(), name="social"),
+    path("editPerfil/", EditView.as_view(), name="edit"),
 ]

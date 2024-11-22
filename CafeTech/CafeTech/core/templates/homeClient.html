@@ -9,7 +9,37 @@
 {% block content %}
     <div class="container">
         <h1>Bem-Vindo(a) à sua Home, <b>{{ user.username }}</b>!</h1>
+        <br>
+        <p>{{ user.descricao }}</p>
     </div>
+
+    <div class="col-md-8">
+        <h2>Dados do usuário</h2>
+        <br>
+        
+        <h5>Situação:</h5>
+        <p>{{ user.adimplencia }}</p>
+        <br>
+        
+        <h5>Telefone:</h5>
+        <p>{{ user.phone_number }}</p>
+        <br>
+        
+        <h5>Membro desde:</h5>
+        <p>{{ user.data_registro }}</p>
+        <br>
+        
+        <h5>Email:</h5>
+        <p>{{ user.email }}</p>
+        <br>
+        
+        <a href="{% url 'editPerfil' %}"><button>Editar Perfil</button></a>
+        <a href="{% url 'logout' %}"><button>Sair</button></a>
+    </div>
+    <div class="col-md-4">
+        <img src="{% static images/user_profile.png %}" class="img-fluid rounded" alt="Foto Perfil">
+    </div>
+
 
     <!-- Modal de boas-vindas -->
     <div class="modal fade" id="welcomeModal" tabindex="-1" aria-labelledby="welcomeModalLabel" aria-hidden="true">
@@ -28,6 +58,7 @@
             </div>
         </div>
     </div>
+
 {% endblock content %}
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

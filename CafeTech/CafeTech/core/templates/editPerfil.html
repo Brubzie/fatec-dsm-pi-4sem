@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+<!-- Título -->
+{% block page_title %}
+    Meu Perfil
+{% endblock page_title %}
+
+<!-- Conteúdo da página -->
+{% block content %}
+    <section class="profile">
+        <div class="profile-details col-md-8">
+            <h1>Editar Perfil:</h1>
+            <form method="post">
+            {% csrf_token %}
+            <div class="mb-3" style="font-size: 20px;">
+                <span class="input-text"> Nome: </span>
+                {{ form.username }}
+            </div>
+            <div class="mb-3" style="font-size: 20px;">
+                <span class="input-text"> Descrição: </span>
+                {{ form.descricao }}
+            </div>
+            <div class="mb-3" style="font-size: 20px;">
+                <h5>Situação:</h5>
+                <p>{{ user.adimplencia }}</p>
+            </div>
+            <div class="mb-3" style="font-size: 20px;">
+                <span class="input-text"> Telefone: </span>
+                {{ form.phone_number }}
+            </div>
+            <div class="mb-3" style="font-size: 20px;">
+                <h5>Membro desde:</h5>
+                <p>{{ user.data_registro }}</p>
+            </div>
+            <div class="mb-3" style="font-size: 20px;">
+                <span class="input-text"> Email: </span>
+                {{ form.email }}
+            </div>
+            <button type="submit">Salvar</button>
+            <a href="{% url 'homeClient' %}"><button>Cancelar</button></a>
+            </form>
+            {% if form.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <strong>{{ error|escape }}</strong><br>
+                {% endfor %}
+            {% endfor %}
+            {% endif %}
+        </div>
+    </section>
+
+    <div class="col-md-4">
+        <img src="{% static images/user_profile.png %}" class="img-fluid rounded" alt="Foto Perfil">
+    </div>
+
+{% endblock content %}

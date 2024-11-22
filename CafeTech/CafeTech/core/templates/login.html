@@ -1,101 +1,35 @@
-{% extends "base.html" %}
-{% load static %}
+{% extends 'base.html' %}
 
-<!-- Título -->
 {% block page_title %}
     Login
 {% endblock page_title %}
 
-<!-- Conteúdo da página -->
 {% block content %}
-    <div class="form-container">
-        <h2>Login</h2>
-        <!-- Login forms -->
-        <form method="post" class="form" action="{% url 'login' %}">
-            {% csrf_token %}
-            
-            <!-- Exibir erros gerais do formulário -->
-            {% if form.non_field_errors %}
-                <div class="alert alert-danger" role="alert">
-                    {{ form.non_field_errors }}
-                </div>
-            {% endif %}
-
-            <div class="form-group">
-                <!-- Campo de username -->
-                {{ form.username.label_tag }}
-                {{ form.username }} 
-                {% if form.username.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ form.username.errors|striptags }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <!-- Campo de password -->
-                {{ form.password.label_tag }} 
-                {{ form.password }}
-                {% if form.password.errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ form.password.errors|striptags }}
-                    </div>
-                {% endif %}
-            </div>
-
-            <button type="submit" class="btn btn-primary">Login</button>
+    <div class="container mt-5" style="max-width: 600px;">
+    <div class="p-4 bg-white rounded shadow" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+        <h2 class="text-center mb-4 text-success">Login</h2>
+        <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="email" class="form-label fw-bold">Email:</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Digite seu email" required/>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label fw-bold">Senha:</label>
+            <input type="password" id="password" name="password" class="form-control" placeholder="Digite sua senha" required/>
+        </div>
+        <div class="text-center">
+            <button type="submit" class="btn btn-success" style="font-size: 1rem;">Entrar</button>
+        </div>
         </form>
-        <!-- Login forms - End -->
-
-        <!-- Google One Tap Button -->
-        <div id="buttonDiv"></div>
-        <!-- Google One Tap Button - End -->
+        <div class="text-center mt-4">
+        <p>
+            Não tem uma conta?
+            <a href="{% url 'register' %}" class="text-success text-decoration-none">
+            Cadastre-se aqui
+            </a>.
+        </p>
+        </div>
     </div>
-
-    <!-- Google One Tap Script -->
-    <script>
-        function handleCredentialResponse(response) {
-            sendDjango(response);
-        }
-    
-        function sendDjango(response) {
-            var id_token = response.credential;
-    
-            fetch('/login/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_token: id_token
-                }),
-            })
-            .then((res) => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    throw new Error('Erro na autenticação');
-                }
-            })
-            .then((data) => {
-                window.location.href = '/homeClient/';
-            })
-            .catch((err) => console.error('Erro:', err));
-        }
-    
-        window.onload = function () {
-            google.accounts.id.initialize({
-                client_id: "{{ YOUR_GOOGLE_CLIENT_ID }}",
-                callback: handleCredentialResponse
-            });
-    
-            google.accounts.id.renderButton(
-                document.getElementById("buttonDiv"),
-                { theme: "outline", size: "large" }  // Customização do botão
-            );
-    
-            google.accounts.id.prompt(); // Exibe o One Tap automaticamente
-        }
-    </script>    
-    <!-- Google One Tap Script - End -->
+    </div>
 {% endblock content %}
