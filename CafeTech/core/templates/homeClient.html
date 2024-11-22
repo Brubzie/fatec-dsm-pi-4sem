@@ -1,0 +1,79 @@
+<!-- Template base -->
+{% extends 'base.html' %}
+
+<!-- Título da página -->
+{% block page_title %}
+    Home
+{% endblock page_title %}
+
+<!-- Conteúdo da página -->
+{% block content %}
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Cafetech</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#planos">Planos</a></li>
+                    <li><a href="#sorteios">Sorteios</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                    <li><a href="{% url 'login' %}" class="btn-login">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h2>Bem-vindo ao Cafetech</h2>
+            <p>O clube de café digital que une amantes de café em uma experiência única!</p>
+            <a href="#planos" class="cta-btn">Descubra nossos planos</a>
+        </div>
+    </section>
+
+    <!-- Funcionalidades -->
+    <section class="features" id="sobre">
+        <div class="container">
+            <h2>Nossas Funcionalidades</h2>
+            <div class="feature">
+                <h3>Controle de Adimplência</h3>
+                <p>Gerencie suas mensalidades com facilidade usando QR Codes exclusivos.</p>
+            </div>
+            <div class="feature">
+                <h3>Integração com Redes Sociais</h3>
+                <p>Interaja com outros membros, participe de promoções e compartilhe sua paixão por café!</p>
+            </div>
+            <div class="feature">
+                <h3>Sorteios Mensais</h3>
+                <p>Ganhe prêmios incríveis baseados nos pontos acumulados em suas interações.</p>
+            </div>
+            <div class="feature">
+                <h3>Chatbot Interativo</h3>
+                <p>Tenha acesso rápido a informações e resolva dúvidas com nosso chatbot 24h.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testemunhos -->
+    <section class="testimonials">
+        <div class="container">
+            <h2>O que nossos membros dizem</h2>
+            <div class="testimonial">
+                <p>"A experiência no Cafetech é única! O controle de adimplência via QR Code é super prático."</p>
+                <p>- João, Membro do Cafetech</p>
+            </div>
+            <div class="testimonial">
+                <p>"Participar dos sorteios e interagir nas redes sociais fez minha paixão por café ainda maior!"</p>
+                <p>- Maria, Membro do Cafetech</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+
+{% endblock content %}
