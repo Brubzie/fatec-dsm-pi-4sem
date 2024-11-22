@@ -88,23 +88,23 @@
     background-color: #f4ede5; /* Fundo bege */
     padding: 40px 20px;
     border-top: 4px solid #d9a76d; /* Detalhe de cor de café */
-  }
+}
 
-  .feedback-title {
+.feedback-title {
     text-align: center;
     font-size: 2rem;
     color: #6b4423; /* Cor marrom de café */
     margin-bottom: 20px;
-  }
+}
 
-  .feedback-container {
+.feedback-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px;
-  }
+}
 
-  .feedback-card {
+.feedback-card {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -114,37 +114,37 @@
     min-width: 250px;
     text-align: center;
     transition: transform 0.2s;
-  }
+}
 
-  .feedback-card:hover {
+.feedback-card:hover {
     transform: scale(1.05);
-    }
+}
 
-  .feedback-card h3 {
+.feedback-card h3 {
     margin: 0;
     font-size: 1.2rem;
     color: #6b4423;
-  }
+}
 
-  .feedback-card p {
+.feedback-card p {
     margin: 10px 0;
     color: #555;
-  }
+}
 
-  .feedback-card .author {
+.feedback-card .author {
     font-style: italic;
     color: #9a7b53; /* Cor mais clara de café */
-  }
+}
 
   .feedback-card .feedback-text {
     font-size: 1rem;
     margin-bottom: 10px;
 }
 
-  @media (max-width: 768px) {
+@media (max-width: 768px) {
     .feedback-card {
-      flex: 1 1 100%; /* Em telas menores, ocupa 100% */
-      margin-bottom: 20px;
+        flex: 1 1 100%; /* Em telas menores, ocupa 100% */
+        margin-bottom: 20px;
     }
 }
 
