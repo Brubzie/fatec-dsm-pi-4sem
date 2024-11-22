@@ -1,85 +1,58 @@
-<!-- Template base -->
 {% extends 'base.html' %}
 
-<!-- Título da página -->
-{% block page_title %} Login {% endblock page_title %}
+{% block page_title %}
+    Login
+{% endblock page_title %}
 
-<!-- Conteúdo da página -->
 {% block content %}
-<div
-  class="container"
-  style="
-    margin-top: 50px;
-    max-width: 600px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  "
->
-  <h2 style="text-align: center; margin-bottom: 20px; color: #3e8e41">Login</h2>
-  <form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    <div style="margin-bottom: 15px">
-      <label for="email" style="font-weight: bold">Email:</label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        placeholder="Digite seu email"
-        style="
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          margin-top: 5px;
-        "
-        required
-      />
+    <div class="container mt-5" style="max-width: 600px;">
+    <div
+        class="p-4 bg-white rounded shadow"
+        style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"
+    >
+        <h2 class="text-center mb-4 text-success">Login</h2>
+        <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="email" class="form-label fw-bold">Email:</label>
+            <input
+            type="email"
+            id="email"
+            name="email"
+            class="form-control"
+            placeholder="Digite seu email"
+            required
+            />
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label fw-bold">Senha:</label>
+            <input
+            type="password"
+            id="password"
+            name="password"
+            class="form-control"
+            placeholder="Digite sua senha"
+            required
+            />
+        </div>
+        <div class="text-center">
+            <button
+            type="submit"
+            class="btn btn-success"
+            style="font-size: 1rem;"
+            >
+            Entrar
+            </button>
+        </div>
+        </form>
+        <div class="text-center mt-4">
+        <p>
+            Não tem uma conta?
+            <a href="{% url 'register' %}" class="text-success text-decoration-none">
+            Cadastre-se aqui
+            </a>.
+        </p>
+        </div>
     </div>
-    <div style="margin-bottom: 15px">
-      <label for="password" style="font-weight: bold">Senha:</label>
-      <input
-        type="password"
-        id="password"
-        name="password"
-        placeholder="Digite sua senha"
-        style="
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 5px;
-          margin-top: 5px;
-        "
-        required
-      />
     </div>
-    <div style="text-align: center">
-      <button
-        type="submit"
-        style="
-          padding: 10px 20px;
-          background-color: #3e8e41;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-size: 1rem;
-        "
-      >
-        Entrar
-      </button>
-    </div>
-  </form>
-  <div style="text-align: center; margin-top: 20px">
-    <p>
-      Não tem uma conta?
-      <a
-        href="{% url 'register' %}"
-        style="color: #3e8e41; text-decoration: none"
-        >Cadastre-se aqui</a
-      >.
-    </p>
-  </div>
-</div>
 {% endblock content %}

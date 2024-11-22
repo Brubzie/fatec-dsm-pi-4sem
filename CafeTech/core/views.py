@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponseRedirect
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -10,7 +10,9 @@ from django.contrib import messages
 from datetime import datetime
 from django.views.generic.edit import FormView
 from .forms import LoginForm, RegisterForm
+from .models import UserProfile
 from django.contrib.auth.models import User
+from django.urls import reverse_lazy
 
 
 class IndexView(View):
@@ -29,76 +31,70 @@ class IndexView(View):
         return render(request, self.template_name, context)
 
 
-class RegisterView(View):
-    """
-    View para registro de novos usuários.
-    Renderiza o formulário de registro e processa a submissão.
-    """
-
+class RegisterView(FormView):
     template_name = "register.html"
+    form_class = RegisterForm
+    success_url = reverse_lazy("login")
 
-    def get_context_data(self, **kwargs):
-        return kwargs
+    def form_valid(self, form):
+        # Validações adicionais antes de salvar
+        if not self.is_email_unique(form.cleaned_data.get("email")):
+            form.add_error("email", "Este e-mail já está registrado.")
+            return self.form_invalid(form)
 
-    def get(self, request):
-        form = RegisterForm()
-        context = self.get_context_data(form=form)
-        return render(request, self.template_name, context)
+        if not self.is_username_unique(form.cleaned_data.get("username")):
+            form.add_error("username", "Este nome de usuário já está registrado.")
+            return self.form_invalid(form)
 
-    def post(self, request):
-        username = request.POST.get("username")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        phone_number = request.POST.get("phone_number")
+        # Salvar o usuário se as validações passarem
+        form.save()
+        messages.success(self.request, "Cadastro realizado com sucesso! Faça login.")
+        return super().form_valid(form)
 
-        user = User.objects.filter(username=username).first()
+    def form_invalid(self, form):
+        # Exibe mensagens de erro caso o formulário seja inválido
+        messages.error(self.request, "Por favor, corrija os erros no formulário.")
+        return super().form_invalid(form)
 
-        if user:
-            messages.error(request, "já existe um usuario com esse nome")
-            return render(request, "login.html")
-        else:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password,
-                phone_number=phone_number,
-            )
-            user.save()
-            messages.success(request, "Registro bem-sucedido! Faça login.")
-            return redirect("login")
+    def is_email_unique(self, email):
+        from django.contrib.auth.models import User
+
+        return not User.objects.filter(email=email).exists()
+
+    def is_username_unique(self, username):
+        from django.contrib.auth.models import User
+
+        return not User.objects.filter(username=username).exists()
 
 
 class LoginView(FormView):
     """
     View para login de usuários.
-    Valida as credenciais e autentica o usuário no sistema.
+    Renderiza o formulário de login e processa a submissão.
     """
 
     template_name = "login.html"
-    form_class = LoginForm
-    success_url = reverse_lazy("homeClient")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
+    def get(self, request):
+        form = LoginForm()
+        return render(request, self.template_name, {"form": form})
 
-    def form_valid(self, form):
-        username = form.cleaned_data.get("username")
-        password = form.cleaned_data.get("password")
-        user = authenticate(self.request, username=username, password=password)
+    def post(self, request):
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST.get("username")
+            password = request.POST.get("password")
+            user = authenticate(username=username, password=password)
 
-        if user:
-            login(self.request, user)
-            messages.success(self.request, "Login realizado com sucesso!")
-            return redirect(self.get_success_url())
+            if user and user.is_active:
+                login(request, user)
+                return redirect("home")
+            else:
+                messages.error(request, "Credenciais inválidas.")
+                return render(request, self.template_name, {"form": form})
         else:
-            # Adiciona um erro geral sem referência a campos específicos
-            messages.error(self.request, "Credenciais inválidas")
-            return self.form_invalid(form)
-
-    def form_invalid(self, form):
-        # O Django já lida com a renderização dos erros automaticamente
-        return render(self.request, self.template_name, {"form": form})
+            messages.error(request, "Erro no formulário. Verifique os dados.")
+            return render(request, self.template_name, {"form": form})
 
 
 @method_decorator(login_required(login_url="/login/"), name="dispatch")
