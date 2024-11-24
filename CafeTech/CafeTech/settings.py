@@ -1,6 +1,5 @@
 from pathlib import Path
 from django.contrib import messages
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -10,10 +9,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config("SECRET_KEY")
+SECRET_KEY = "django-insecure-7md(6z=yh^q+^t+&0*pqu(163&x1b@kn&v7_96fd^y5h4s8k_7"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG", default=True, cast=bool)
+DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost", "*"]
 
@@ -98,15 +97,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+# Internacionalização
 LANGUAGE_CODE = "pt-br"
-
 TIME_ZONE = "America/Sao_Paulo"
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -121,9 +115,9 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Configurações de autenticação
-LOGIN_URL = "/login/"
-LOGOUT_REDIRECT_URL = "/"
-LOGIN_REDIRECT_URL = "/home/"
+LOGIN_URL = "/login/" # Rota de login
+LOGOUT_REDIRECT_URL = "/" # Rota de logout
+LOGIN_REDIRECT_URL = "/home/" # Rota de redirecionamento após login
 
 # Adiciona '/' no final das URLs que não o tiverem
 APPEND_SLASH = True
