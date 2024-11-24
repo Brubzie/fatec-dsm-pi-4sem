@@ -1,36 +1,51 @@
 {
-  "editor.formatOnSave": true, 
-  // Habilita a formatação automática do código toda vez que um arquivo é salvo no editor.
-  
-  "editor.tabSize": 4, 
-  // Define que o tamanho de cada tabulação (tab) será equivalente a 4 espaços, proporcionando uma indentação consistente.
+  // Configuração geral
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.wordWrap": "on",
+  "editor.minimap.enabled": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.renderWhitespace": "all",
 
-  "editor.insertSpaces": true, 
-  // Insere espaços em vez de tabulações quando o usuário pressiona a tecla Tab, para evitar problemas com diferentes ambientes que podem interpretar tabs de maneira diferente.
+  // Configurações do Prettier
+  "prettier.tabWidth": 4,
+  "prettier.useTabs": false,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.bracketSpacing": true,
+  "prettier.arrowParens": "always",
+  "prettier.printWidth": 80,
 
-  "files.exclude": { 
-      // Configura quais arquivos ou diretórios devem ser excluídos da visualização no explorador de arquivos do VSCode.
-
-      "**/__pycache__": true, 
-      // Exclui a pasta __pycache__, onde o Python armazena arquivos compilados automaticamente para acelerar a execução.
-      
-      "**/*.pyc": true, 
-      // Exclui arquivos .pyc, que são bytecodes compilados do Python.
-      
-      "**/*.pyo": true 
-      // Exclui arquivos .pyo, que também são bytecodes compilados, gerados em modo otimizado.
+  // Configurações específicas para arquivos
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
-  "files.associations": { 
-      // Associa certos tipos de arquivo a linguagens específicas para fins de sintaxe e formatação no editor.
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.cursorStyle": "underline",
+  "terminal.integrated.cursorBlinking": true,
 
-      "*.html": "html", 
-      // Trata todos os arquivos com a extensão .html como arquivos HTML comuns.
-      
-      "**/templates/**/*.html": "html", 
-      // Associa todos os arquivos .html dentro da pasta templates e suas subpastas à linguagem HTML.
-      
-      "**/templates/*": "html" 
-      // Associa todos os arquivos .html diretamente dentro da pasta templates à linguagem HTML.
-  }
+  // Outras configurações úteis
+  "files.autoSave": "off",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.DS_Store": true,
+    "**/node_modules": true
+  },
+  "workbench.colorTheme": "Night Owl",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.startupEditor": "welcomePage"
 }
