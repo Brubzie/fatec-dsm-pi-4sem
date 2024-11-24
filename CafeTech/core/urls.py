@@ -6,6 +6,8 @@ from .views import (
     HomeClientView,
     SettingsClientView,
     logout_view,
+    SocialView,
+    EditView,
 )
 
 # URLs principais
@@ -16,7 +18,9 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("login/", LoginView.as_view(), name="login"),
     path("logout/", logout_view, name="logout"),
+    path("social/", SocialView.as_view(), name="social"),
     # Páginas do cliente
     path("home/", HomeClientView.as_view(), name="home"),
+    path("editPerfil/", EditView, name="edit"),
     path("settings/", SettingsClientView.as_view(), name="settings"),
 ]

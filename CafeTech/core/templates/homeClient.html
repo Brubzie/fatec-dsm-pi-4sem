@@ -36,6 +36,34 @@
         </div>
     </section>
 
+    <!--Dados do Usuário-->
+    <div class="col-md-8">
+        <h2>Dados do usuário</h2>
+        <br>
+        
+        <h5>Situação:</h5>
+        <p>{{ user.adimplencia }}</p>
+        <br>
+        
+        <h5>Telefone:</h5>
+        <p>{{ user.phone_number }}</p>
+        <br>
+        
+        <h5>Membro desde:</h5>
+        <p>{{ user.data_registro }}</p>
+        <br>
+        
+        <h5>Email:</h5>
+        <p>{{ user.email }}</p>
+        <br>
+        
+        <a href="{% url 'editPerfil' %}"><button>Editar Perfil</button></a>
+        <a href="{% url 'logout' %}"><button>Sair</button></a>
+    </div>
+    <div class="col-md-4">
+        <img src="{% static images/user_profile.png %}" class="img-fluid rounded" alt="Foto Perfil">
+    </div>
+
     <!-- Funcionalidades -->
     <section class="features" id="sobre">
         <div class="container">
