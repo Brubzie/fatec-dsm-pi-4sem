@@ -9,7 +9,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from datetime import datetime
 from django.views.generic.edit import FormView
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, EditUserForm
 from .models import UserProfile
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
@@ -134,3 +134,22 @@ def logout_view(request):
     logout(request)
     messages.info(request, "Você foi desconectado com sucesso.")
     return HttpResponseRedirect(reverse("login"))
+
+class SocialView(View):
+    template_name = 'social.html'
+
+    def get(self, request):
+        data = {'user': request.user}
+        return render(request, self.template_name, data)
+    
+@login_required
+def EditView(request):
+    if request.method == 'POST':
+        form = EditUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('../homeClient')
+    else:
+        form = EditUserForm(instance=request.user)
+    
+    return render(request, 'edit', {'form': form})

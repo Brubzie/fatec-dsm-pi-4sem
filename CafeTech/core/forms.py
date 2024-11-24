@@ -144,3 +144,35 @@ class LoginForm(forms.Form):
             if user and not user.is_active:
                 raise forms.ValidationError("Este usuário está inativo.")
         return cleaned_data
+
+class EditUserForm(forms.Form):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'phone_number', 'descricao']
+        labels = {
+            'username': 'Usuário',
+            'password': 'Senha',
+        }
+        
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if len(username) < 4:
+            raise ValidationError('O nome de usuário deve ter pelo menos 4 caracteres.')
+        if username.isdigit():
+            raise ValidationError('O nome de usuário não pode conter apenas números.')
+        if re.search(r'[\W_]', username):
+            raise ValidationError('O nome de usuário não deve conter caracteres especiais.')
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('Este email já está em uso.')
+        return email
+    
+    def clean_phone_number(self):
+        phone_number = self.cleaned_data.get('phone_number')
+        phone_regex = re.compile(r'^\(\d{2}\)\s?\d{4,5}-\d{4}$')
+        if not phone_regex.match(phone_number):
+            raise ValidationError('O número de telefone deve estar no formato (99) 99999-9999 ou (99) 9999-9999.')
+        return phone_number

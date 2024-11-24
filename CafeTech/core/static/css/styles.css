@@ -157,3 +157,127 @@ footer .social-media a {
     cursor: pointer;
     font-size: 1rem;
 }
+
+/* Estilização do formulário */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+}
+
+.form-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo para as seções */
+.section {
+    padding: 40px 20px;
+    margin-bottom: 40px;
+}
+.section:last-child {
+    margin-bottom: 0;
+}
+
+/* Feedback */
+.feedback-section {
+    background-color: #f4ede5; /* Fundo bege */
+    padding: 40px 20px;
+    border-top: 4px solid #d9a76d; /* Detalhe de cor de café */
+  }
+
+  .feedback-title {
+    text-align: center;
+    font-size: 2rem;
+    color: #6b4423; /* Cor marrom de café */
+    margin-bottom: 20px;
+  }
+
+  .feedback-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .feedback-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    max-width: 300px;
+    flex: 1 1 calc(33.33% - 20px); /* Flexível para 3 por linha */
+    min-width: 250px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+
+  .feedback-card:hover {
+    transform: scale(1.05);
+    }
+
+  .feedback-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #6b4423;
+  }
+
+  .feedback-card p {
+    margin: 10px 0;
+    color: #555;
+  }
+
+  .feedback-card .author {
+    font-style: italic;
+    color: #9a7b53; /* Cor mais clara de café */
+  }
+
+  .feedback-card .feedback-text {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+  @media (max-width: 768px) {
+    .feedback-card {
+      flex: 1 1 100%; /* Em telas menores, ocupa 100% */
+      margin-bottom: 20px;
+    }
+}
+
+/* Vantagens */
+.advantage-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* Botões e Links */
+.btn {
+    margin: 10px;
+}
