@@ -1,10 +1,9 @@
 from django.urls import path
+from django.contrib.auth import views as auth_views
 from .views import (
     IndexView,
-    RegisterView,
-    LoginView,
+    register,
     HomeClientView,
-    SettingsClientView,
     logout_view,
     SocialView,
     EditView,
@@ -13,14 +12,13 @@ from .views import (
 # URLs principais
 urlpatterns = [
     # Página inicial
-    path("", IndexView.as_view(), name="index"),
+    path('', IndexView.as_view(), name='index'),
     # Rotas de autenticação
-    path("register/", RegisterView.as_view(), name="register"),
-    path("login/", LoginView.as_view(), name="login"),
-    path("logout/", logout_view, name="logout"),
-    path("social/", SocialView.as_view(), name="social"),
+    path('register/', register, name='register'),
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', logout_view, name='logout'),
+    path('social/', SocialView.as_view(), name='social'),
     # Páginas do cliente
-    path("home/", HomeClientView.as_view(), name="home"),
-    path("editPerfil/", EditView, name="edit"),
-    path("settings/", SettingsClientView.as_view(), name="settings"),
+    path('home/', HomeClientView.as_view(), name='home'),
+    path('editPerfil/', EditView, name='edit'),
 ]

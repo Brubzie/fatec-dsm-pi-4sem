@@ -1,6 +1,8 @@
 <!-- Template base -->
 {% extends 'base.html' %}
 
+{% load static %}
+
 <!-- Título da página -->
 {% block page_title %}
     Home
@@ -57,11 +59,11 @@
         <p>{{ user.email }}</p>
         <br>
         
-        <a href="{% url 'editPerfil' %}"><button>Editar Perfil</button></a>
+        <a href="{% url 'edit' %}"><button>Editar Perfil</button></a>
         <a href="{% url 'logout' %}"><button>Sair</button></a>
     </div>
     <div class="col-md-4">
-        <img src="{% static images/user_profile.png %}" class="img-fluid rounded" alt="Foto Perfil">
+        <img src="{% static 'images/user_profile.png' %}" class="img-fluid rounded" alt="Foto de Perfil">
     </div>
 
     <!-- Funcionalidades -->
@@ -102,6 +104,6 @@
         </div>
     </section>
 
-    <script src="script.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 
 {% endblock content %}
