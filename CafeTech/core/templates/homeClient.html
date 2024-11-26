@@ -18,7 +18,7 @@
             </div>
             <nav class="nav">
                 <ul>
-                    <li><a href="#home">Home</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
                     <li><a href="#sobre">Sobre</a></li>
                     <li><a href="#planos">Planos</a></li>
                     <li><a href="#sorteios">Sorteios</a></li>
@@ -103,7 +103,5 @@
             </div>
         </div>
     </section>
-
-    <script src="{% static 'js/script.js' %}"></script>
 
 {% endblock content %}
