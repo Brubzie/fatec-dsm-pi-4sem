@@ -69,7 +69,7 @@ class HomeClientView(View):
 
     def get(self, request):
         if not messages.get_messages(request):
-            messages.info(request, "Bem-vindo de volta!")
+            messages.info(request, f"Bem-vindo de volta {request.user.username}!")
         return render(request, self.template_name, {"user": request.user})
 
 @login_required(login_url="/login/")
@@ -95,8 +95,13 @@ def EditView(request):
         form = EditUserForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('../homeClient')
+            # Adicionando uma mensagem de sucesso
+            messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+            return redirect('homeClient')  # Usando a função reverse para redirecionamento
+        else:
+            # Adicionando uma mensagem de erro caso o formulário seja inválido
+            messages.error(request, 'Ocorreu um erro ao atualizar seu perfil. Verifique os campos e tente novamente.')
     else:
         form = EditUserForm(instance=request.user)
     
-    return render(request, 'edit', {'form': form})
+    return render(request, 'editPerfil.html', {'form': form})

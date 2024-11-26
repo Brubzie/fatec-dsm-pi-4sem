@@ -38,53 +38,57 @@
         </div>
     </section>
 
-    <!--Dados do Usuário-->
-    <div class="col-md-8">
-        <h2>Dados do usuário</h2>
-        <br>
-        
-        <h5>Situação:</h5>
-        <p>{{ user.adimplencia }}</p>
-        <br>
-        
-        <h5>Telefone:</h5>
-        <p>{{ user.phone_number }}</p>
-        <br>
-        
-        <h5>Membro desde:</h5>
-        <p>{{ user.data_registro }}</p>
-        <br>
-        
-        <h5>Email:</h5>
-        <p>{{ user.email }}</p>
-        <br>
-        
-        <a href="{% url 'edit' %}"><button>Editar Perfil</button></a>
-        <a href="{% url 'logout' %}"><button>Sair</button></a>
-    </div>
-    <div class="col-md-4">
-        <img src="{% static 'images/user_profile.png' %}" class="img-fluid rounded" alt="Foto de Perfil">
+    <!-- Dados do Usuário -->
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <h2 class="mb-3">Dados do Usuário</h2>
+                    <p><strong>Situação:</strong> {{ user.adimplencia }}</p>
+                    <p><strong>Telefone:</strong> {{ user.phone_number }}</p>
+                    <p><strong>Membro desde:</strong> {{ user.data_registro }}</p>
+                    <p><strong>Email:</strong> {{ user.email }}</p>
+                    <div>
+                        <a href="{% url 'edit' %}" class="btn btn-secondary btn-sm">Editar Perfil</a>
+                        <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">Sair</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <img src="{% static 'images/user_profile.png' %}" class="img-fluid rounded-circle" alt="Foto de Perfil">
+            </div>
+        </div>
     </div>
 
     <!-- Funcionalidades -->
-    <section class="features" id="sobre">
+    <section class="features py-5 bg-light" id="sobre">
         <div class="container">
-            <h2>Nossas Funcionalidades</h2>
-            <div class="feature">
-                <h3>Controle de Adimplência</h3>
-                <p>Gerencie suas mensalidades com facilidade usando QR Codes exclusivos.</p>
-            </div>
-            <div class="feature">
-                <h3>Integração com Redes Sociais</h3>
-                <p>Interaja com outros membros, participe de promoções e compartilhe sua paixão por café!</p>
-            </div>
-            <div class="feature">
-                <h3>Sorteios Mensais</h3>
-                <p>Ganhe prêmios incríveis baseados nos pontos acumulados em suas interações.</p>
-            </div>
-            <div class="feature">
-                <h3>Chatbot Interativo</h3>
-                <p>Tenha acesso rápido a informações e resolva dúvidas com nosso chatbot 24h.</p>
+            <h2 class="text-center mb-4">Nossas Funcionalidades</h2>
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="card p-3">
+                        <h3>Controle de Adimplência</h3>
+                        <p>Gerencie suas mensalidades com facilidade usando QR Codes exclusivos.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3">
+                        <h3>Integração com Redes Sociais</h3>
+                        <p>Interaja com outros membros e compartilhe sua paixão por café!</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3">
+                        <h3>Sorteios Mensais</h3>
+                        <p>Ganhe prêmios incríveis baseados nos pontos acumulados.</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card p-3">
+                        <h3>Chatbot Interativo</h3>
+                        <p>Resolva dúvidas rapidamente com nosso chatbot 24h.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

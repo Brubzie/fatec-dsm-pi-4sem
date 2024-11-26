@@ -3,47 +3,140 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import UserProfile
 
+
 class RegisterForm(UserCreationForm):
     """
-    Formulário de registro de novo usuário.
+    Formulário de registro de novo usuário com campos personalizados.
     """
-    email = forms.EmailField(required=True)
-    first_name = forms.CharField(max_length=100, required=True)
-    last_name = forms.CharField(max_length=100, required=True)
-    phone_number = forms.CharField(max_length=15, required=True)  # Número de telefone
-    birth_date = forms.DateField(widget=forms.SelectDateWidget(years=range(1900, 2100)), required=True)  # Data de nascimento
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Digite seu e-mail',
+        })
+    )
+    first_name = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nome',
+        })
+    )
+    last_name = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sobrenome',
+        })
+    )
+    phone_number = forms.CharField(
+        max_length=15,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Número de telefone',
+            'id': 'phone_number',
+        })
+    )
+    birth_date = forms.DateField(
+        required=True,
+        widget=forms.SelectDateWidget(
+            years=range(1900, 2100),
+            attrs={'class': 'form-select'}
+        )
+    )
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'phone_number', 'birth_date']
-        
-        # Usando widgets para adicionar o ID e classe ao campo phone_number
+        fields = ['username', 'first_name', 'last_name', 'email', 'phone_number', 'birth_date', 'password1', 'password2']
         widgets = {
-            'phone_number': forms.TextInput(attrs={
-                'class': 'form-control',  # Adicionando a classe do Bootstrap
-                'id': 'phone_number'      # Definindo o ID
-            })
+            'username': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nome de usuário',
+            }),
+            'password1': forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Senha',
+            }),
+            'password2': forms.PasswordInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Confirme sua senha',
+            }),
         }
+
 
 class EditUserForm(forms.ModelForm):
     """
-    Formulário de edição de informações do usuário.
+    Formulário para editar informações básicas do usuário.
     """
+    first_name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nome',
+        })
+    )
+    last_name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Sobrenome',
+        })
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'E-mail',
+        })
+    )
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
 
+
 class EditUserProfileForm(forms.ModelForm):
     """
-    Formulário de edição de informações adicionais do perfil do usuário.
+    Formulário para editar informações adicionais do perfil do usuário.
     """
-    bio = forms.CharField(widget=forms.Textarea, required=False)
-    birth_date = forms.DateField(widget=forms.SelectDateWidget(years=range(1900, 2100)), required=False)
-    profile_picture = forms.ImageField(required=False)
-    phone_number = forms.CharField(max_length=15, required=False)  # Adicionando telefone
-    adimplencia = forms.BooleanField(required=False)  # Adicionando adimplência
+    bio = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Conte um pouco sobre você...',
+            'rows': 4,
+        }),
+        required=False
+    )
+    birth_date = forms.DateField(
+        widget=forms.SelectDateWidget(
+            years=range(1900, 2100),
+            attrs={'class': 'form-select'}
+        ),
+        required=False
+    )
+    profile_picture = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+        })
+    )
+    phone_number = forms.CharField(
+        max_length=15,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Número de telefone',
+        }),
+        required=False
+    )
+    adimplencia = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )
 
-    # O campo data_registro será preenchido automaticamente, então não precisa ser editável
     class Meta:
         model = UserProfile
         fields = ['bio', 'birth_date', 'profile_picture', 'phone_number', 'adimplencia']
