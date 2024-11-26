@@ -4,7 +4,7 @@
   "editor.tabSize": 4,
   "editor.insertSpaces": true,
   "editor.detectIndentation": false,
-  "editor.wordWrap": "on",
+  "editor.wordWrap": "off",
   "editor.minimap.enabled": true,
   "editor.cursorBlinking": "smooth",
   "editor.renderWhitespace": "all",
