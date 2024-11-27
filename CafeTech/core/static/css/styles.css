@@ -59,11 +59,13 @@ header .btn-login {
 .hero h2 {
     font-size: 3rem;
     margin-bottom: 20px;
+    color: #6b4423;
 }
 
 .hero p {
     font-size: 1.3rem;
     margin-bottom: 30px;
+    color: #6b4423;
 }
 
 .cta-btn {

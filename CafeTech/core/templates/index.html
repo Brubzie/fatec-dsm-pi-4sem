@@ -9,6 +9,14 @@
 
 <!-- Conteúdo da página -->
 {% block content %}
+    <!-- Seção do Clube -->
+    <div class="section">
+        <h1>Faça parte do clube do café</h1>
+        <p>Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
+        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
+        <img src="{% static 'images/Index_CoffeeClub.jpg' %}" class="img-fluid rounded" alt="Clube do Café">
+    </div>
+
     <div class="container mt-5">
         <div class="text-center">
             <h1>Bem-vindo à CafeTech!</h1>
@@ -19,27 +27,6 @@
                 marcantes e de alta qualidade.
             </p>
         </div>
-        <div class="row mt-5">
-            <div class="col-md-6">
-                <img src="{% static 'images/empresa.jpeg' %}" alt="Sobre a CafeTech" class="img-fluid rounded shadow">
-            </div>
-            <div class="col-md-6 d-flex align-items-center">
-                <p>
-                    Com uma equipe apaixonada e criativa, trabalhamos para tornar a tecnologia mais acessível e 
-                    prática no dia a dia. Desde desenvolvimento de sistemas até soluções personalizadas, a CafeTech 
-                    está sempre pronta para atender às suas necessidades e superar expectativas. 
-                    Vamos transformar seus desafios em oportunidades!
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Seção do Clube -->
-    <div class="section">
-        <h1>Faça parte do clube do café</h1>
-        <p>Contribua mensalmente e participe da rede de networking, das trocas com os membros do clube, e claro, desfrute de um cafézinho todo dia!</p>
-        <a href="{% url 'login' %}" class="btn btn-secondary m-2">Login</a>
-        <img src="{% static 'images/Index_CoffeeClub.jpg' %}" class="img-fluid rounded" alt="Clube do Café">
     </div>
 
     <!-- Seção de Vantagens -->
