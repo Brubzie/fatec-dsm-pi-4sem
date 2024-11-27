@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório de Adimplentes</title>
+</head>
+<body>
+    <h1>Relatório de Adimplentes</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Data de Registro</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in adimplentes %}
+                <tr>
+                    <td>{{ user.user.username }}</td>
+                    <td>{{ user.user.email }}</td>
+                    <td>{{ user.phone_number }}</td>
+                    <td>{{ user.data_registro }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
