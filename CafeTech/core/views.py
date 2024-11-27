@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth import logout, login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from django.contrib import messages
 from datetime import datetime
@@ -11,7 +11,7 @@ from .forms import EditUserForm
 from .forms import RegisterForm
 from .models import UserProfile
 from django.db import IntegrityError, transaction
-
+import csv
 
 class IndexView(View):
     """
@@ -113,3 +113,36 @@ def EditView(request):
         form = EditUserForm(instance=request.user)
     
     return render(request, 'editPerfil.html', {'form': form})
+
+# Verificar se o usuário é administrador
+def is_admin(user):
+    return user.is_staff
+
+
+# View para exibir relatório de adimplentes
+@login_required
+@user_passes_test(is_admin)  # Apenas para admins
+def relatorio_adimplentes(request):
+    adimplentes = UserProfile.objects.filter(adimplencia=True)
+
+    # Retornar uma página HTML com os dados
+    return render(request, 'relatorios/adimplentes.html', {'adimplentes': adimplentes})
+
+
+# View para gerar relatório de inadimplentes em CSV
+@login_required
+@user_passes_test(is_admin)  # Apenas para admins
+def relatorio_inadimplentes_csv(request):
+    inadimplentes = UserProfile.objects.filter(adimplencia=False)
+
+    # Gerar arquivo CSV
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="inadimplentes.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['Nome', 'Email', 'Telefone', 'Data de Registro'])
+
+    for user in inadimplentes:
+        writer.writerow([user.user.username, user.user.email, user.phone_number, user.data_registro])
+
+    return response
