@@ -24,3 +24,23 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f'Perfil de: {self.user.username}'
+    
+    @classmethod
+    def verificar_adimplencia(nome=None, email=None):
+        try:
+            if nome:
+                usuario = User.objects.get(username=nome)
+            elif email:
+                usuario = User.objects.get(email=email)
+            else:
+                return "Por favor, forneça um nome ou email válido."
+            
+            perfil = usuario.profile
+            if perfil.adimplencia:
+                return f"Usuário {usuario.username} está **adimplente**."
+            else:
+                return f"Usuário {usuario.username} está **inadimplente**."
+        except User.DoesNotExist:
+            return "Usuário não encontrado."
+        except Exception as e:
+            return f"Ocorreu um erro: {e}"

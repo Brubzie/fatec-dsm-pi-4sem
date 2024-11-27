@@ -3,7 +3,6 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
 colorama==0.4.6
 coverage==7.6.4
-decouple==0.0.7
 distlib==0.3.8
 Django==5.0.6
 filelock==3.13.4
@@ -14,6 +13,7 @@ platformdirs==4.2.0
 pluggy==1.5.0
 pytest==8.3.3
 pytest-cov==6.0.0
+python-decouple==3.8
 requests==2.31.0
 sqlparse==0.5.0
 tzdata==2024.1
