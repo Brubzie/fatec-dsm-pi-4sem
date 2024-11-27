@@ -10,6 +10,7 @@ from datetime import datetime
 from .forms import EditUserForm
 from .forms import RegisterForm
 from .models import UserProfile
+from django.db import IntegrityError, transaction
 
 
 class IndexView(View):
@@ -32,26 +33,33 @@ def register(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            # Criando o usuário
-            user = form.save()
+            try:
+                # Usando uma transação para consistência
+                with transaction.atomic():
+                    # Criando o usuário
+                    user = form.save()
 
-            # Obtendo os dados adicionais do formulário
-            phone_number = form.cleaned_data.get('phone_number')
-            birth_date = form.cleaned_data.get('birth_date')
+                    # Obtendo os dados adicionais do formulário
+                    phone_number = form.cleaned_data.get('phone_number')
+                    birth_date = form.cleaned_data.get('birth_date')
 
-            # Criando o perfil de usuário
-            profile = UserProfile.objects.create(
-                user=user,
-                phone_number=phone_number,
-                birth_date=birth_date,
-                adimplencia=True,  # Definindo o padrão de adimplência como True para o novo usuário
-            )
+                    # Criando ou recuperando o perfil do usuário
+                    profile, created = UserProfile.objects.get_or_create(
+                        user=user,
+                        defaults={
+                            'phone_number': phone_number,
+                            'birth_date': birth_date,
+                            'adimplencia': True,
+                        }
+                    )
 
-            # Logando o usuário
-            login(request, user)
-            
-            # Redirecionando para a página inicial ou outra página de sua escolha
-            return redirect('index')  
+                    # Logando o usuário
+                    login(request, user)
+
+                    # Redirecionando para a página inicial
+                    return redirect('index')
+            except IntegrityError:
+                form.add_error(None, "Erro ao criar o perfil. Já existe um usuário associado.")
     else:
         form = RegisterForm()
 

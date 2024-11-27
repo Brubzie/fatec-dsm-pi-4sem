@@ -10,24 +10,6 @@
 
 <!-- Conteúdo da página -->
 {% block content %}
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>Cafetech</h1>
-            </div>
-            <nav class="nav">
-                <ul>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
-                    <li><a href="#planos">Planos</a></li>
-                    <li><a href="#sorteios">Sorteios</a></li>
-                    <li><a href="#contato">Contato</a></li>
-                    <li><a href="{% url 'login' %}" class="btn-login">Login</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -93,19 +75,23 @@
         </div>
     </section>
 
-    <!-- Testemunhos -->
-    <section class="testimonials">
-        <div class="container">
-            <h2>O que nossos membros dizem</h2>
-            <div class="testimonial">
-                <p>"A experiência no Cafetech é única! O controle de adimplência via QR Code é super prático."</p>
-                <p>- João, Membro do Cafetech</p>
+    <!-- Seção de Feedback -->
+    <div class="section feedback-section">
+        <h2>O que nossos membros dizem</h2>
+        <div class="feedback-container">
+            <div class="feedback-card">
+                <p class="feedback-text">"Participar dos sorteios e interagir nas redes sociais fez minha paixão por café ainda maior!"</p>
+                <p class="feedback-author">— Maria, Membro do Cafetech</p>
             </div>
-            <div class="testimonial">
-                <p>"Participar dos sorteios e interagir nas redes sociais fez minha paixão por café ainda maior!"</p>
-                <p>- Maria, Membro do Cafetech</p>
+            <div class="feedback-card">
+                <p class="feedback-text">"A experiência no Cafetech é única! O controle de adimplência via QR Code é super prático."</p>
+                <p class="feedback-author">— João, Membro do Cafetech</p>
+            </div>
+            <div class="feedback-card">
+                <p class="feedback-text">"Além do café delicioso, adoro o chatbot! Ele sempre responde minhas dúvidas rapidamente."</p>
+                <p class="feedback-author">— Mariana Silva</p>
             </div>
         </div>
-    </section>
+    </div>
 
 {% endblock content %}
