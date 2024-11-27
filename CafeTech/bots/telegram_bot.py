@@ -3,10 +3,15 @@ from telegram.ext import Application, CommandHandler, CallbackContext
 import django
 from django.conf import settings
 import os
+from dotenv import load_dotenv
 
 # Configurar o ambiente Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'CafeTech.settings')
 django.setup()
+
+load_dotenv()
+
+TOKEN = os.getenv("TOKEN")
 
 from core.models import UserProfile
 
@@ -46,7 +51,6 @@ async def consulta_email(update: Update, context: CallbackContext):
         await update.message.reply_text("Email não encontrado.")
 
 def main():
-    TOKEN = "8116260087:AAES6fa-HKw0dxJ5wXOFDEAhdW_XVj1j1Es"  # Token do bot
     application = Application.builder().token(TOKEN).build()
 
     # Adiciona os handlers diretamente ao application
